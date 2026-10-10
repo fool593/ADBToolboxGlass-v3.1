@@ -61,15 +61,16 @@ fun NativeRoot(onSwitchToGlass: () -> Unit) {
             0 -> NativeHome(onSwitchToGlass, surface, onSurface, sub, accent, light)
             1 -> NativeMore(surface, onSurface, sub, accent)
             2 -> NativeModules(surface, onSurface, sub, accent)
-            3 -> NativeTerminal(surface, onSurface, sub, accent)
-            4 -> NativeSettings(onSwitchToGlass, surface, onSurface, sub, accent)
+            3 -> NativeAll(surface, onSurface, sub, accent)
+            4 -> NativeTerminal(surface, onSurface, sub, accent)
+            5 -> NativeSettings(onSwitchToGlass, surface, onSurface, sub, accent)
         }
         // 底部导航（原生风）
         Row(
             Modifier.fillMaxWidth().background(surface).shadow(4.dp).padding(vertical = 10.dp),
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            listOf("首页", "功能", "模块", "终端", "设置").forEachIndexed { i, label ->
+            listOf("首页", "功能", "模块", "全部", "终端", "设置").forEachIndexed { i, label ->
                 val sel = tab == i
                 Column(
                     Modifier.weight(1f).clickable { tab = i }.padding(vertical = 6.dp),
@@ -320,6 +321,46 @@ private fun NativeModules(surface: Color, onSurface: Color, sub: Color, accent: 
                 Spacer(Modifier.height(8.dp))
                 BasicText(restore, style = TextStyle(color = sub, fontSize = 11.sp))
             }
+        }
+        Spacer(Modifier.height(24.dp))
+    }
+}
+
+@Composable
+private fun NativeAll(surface: Color, onSurface: Color, sub: Color, accent: Color) {
+    var out by remember { mutableStateOf("") }
+    val scope = rememberCoroutineScope()
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+        NativeCard("全部功能（原生补齐）", surface, onSurface, sub) {
+            val rows = listOf(
+                Triple("权限（真实列出）", "cmd appops get --uid all 2>/dev/null | head -n 6", "perms"),
+                Triple("已装应用（真实列表）", "pm list packages -3 2>/dev/null | head -n 10", "apps"),
+                Triple("华为优化信息（真实属性）", "getprop ro.config.hw_theme 2>/dev/null; getprop ro.product.brand; getprop ro.build.version.release", "hw"),
+                Triple("品牌分类（真实厂商）", "getprop ro.product.brand; getprop ro.product.marketname 2>/dev/null", "brand"),
+                Triple("手机体检（磁盘/CPU/内存）", "df -h /sdcard | tail -n 1; cat /proc/loadavg; cat /proc/meminfo | head -n 3", "health"),
+                Triple("还原默认（真实读受影响键）", "settings get global window_animation_scale; settings get system font_scale; settings get secure backup_enabled", "restore"),
+                Triple("内核提权探测（真实 uname+su）", "uname -r; su -c id 2>/dev/null || id", "kroot"),
+                Triple("Root 工具（真实探测）", "su -c id 2>/dev/null || echo no-root; getprop ro.product.device", "root"),
+                Triple("截图到下载（真实操作）", "screencap -p /sdcard/Download/native_shot.png && echo saved", "shot")
+            )
+            rows.forEach { (label, cmd, _) ->
+                NativeRowButton(label, accent, onSurface) {
+                    scope.launch {
+                        out = withContext(Dispatchers.Default) {
+                            val r = ADBTools.execCommand(cmd, 20)
+                            if (r.exitCode == 0 && r.output.isNotBlank()) r.output.trim().take(300) else "（无输出/需提权）"
+                        }
+                    }
+                }
+                Spacer(Modifier.height(6.dp))
+            }
+            if (out.isNotEmpty()) {
+                Spacer(Modifier.height(8.dp))
+                BasicText(out, style = TextStyle(color = sub, fontSize = 11.sp, fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace))
+            }
+        }
+        NativeCard("说明", surface, onSurface, sub) {
+            BasicText("深度流程（GhostLock 一键/全量还原/模块刷入）保留在玻璃 UI 对应页可直接使用；此处提供独立的原生入口与真实回读。", style = TextStyle(color = sub, fontSize = 12.sp))
         }
         Spacer(Modifier.height(24.dp))
     }
