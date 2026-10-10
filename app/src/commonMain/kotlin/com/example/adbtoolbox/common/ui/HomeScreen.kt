@@ -245,12 +245,12 @@ fun GlassCard(
     val intensity = config.globalIntensity.value
 
     // 根据页面类型选择参数
-    val blurRadius: Float
-    val opacity: Float
-    val corner: Float
-    val refHeight: Float
-    val refAmount: Float
-    val enableVibrancy: Boolean
+    var blurRadius: Float
+    var opacity: Float
+    var corner: Float
+    var refHeight: Float
+    var refAmount: Float
+    var enableVibrancy: Boolean
     when (pageType) {
         "home" -> {
             blurRadius = config.homeBlurRadius.value
@@ -346,6 +346,9 @@ fun GlassCard(
         blurRadius, enableVibrancy, intensity, refHeight, refAmount, chromatic, glowRefraction, highlight
     ) {
         {
+            if (com.example.adbtoolbox.common.GlassEffectConfig.nativeFlat.value) {
+                blurRadius = 0f; opacity = 1f; refHeight = 0f; refAmount = 0f; enableVibrancy = false
+            }
             val minDim = size.minDimension
             // 全局渲染强度映射为 0.5~1.5 倍：即使拉到 200% 也不会翻倍压垮渲染，同时保证低强度也有可见效果
             val eff = 0.5f + intensity * 0.5f
