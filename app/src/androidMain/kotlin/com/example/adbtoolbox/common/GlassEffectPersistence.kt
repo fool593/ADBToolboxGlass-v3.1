@@ -139,6 +139,7 @@ actual object GlassEffectPersistence {
         editor.putBoolean("app_onboarding_done", AppSettings.onboardingDone)
         // 开屏动画开关
         editor.putBoolean("app_splash_anim", AppSettings.splashAnimEnabled)
+        editor.putBoolean("ui_native_style", AppSettings.nativeUi)
 
         editor.apply()
     }
@@ -161,6 +162,8 @@ actual object GlassEffectPersistence {
         AppSettings.themeUserOverrode = prefs.getBoolean("app_theme_user_overrode", false)
         AppSettings.onboardingDone = prefs.getBoolean("app_onboarding_done", false)
         AppSettings.splashAnimEnabled = prefs.getBoolean("app_splash_anim", true)
+        AppSettings.nativeUi = prefs.getBoolean("ui_native_style", false)
+        try { com.example.adbtoolbox.common.GlassEffectConfig.applyUiStyle() } catch (_: Exception) {}
         if (savedTheme != null) AppSettings.themeId = savedTheme
 
         val config = GlassEffectConfig

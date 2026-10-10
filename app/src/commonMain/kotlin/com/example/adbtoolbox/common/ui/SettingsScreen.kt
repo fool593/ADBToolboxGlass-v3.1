@@ -338,6 +338,29 @@ fun SettingsScreen(
                         }
                     }
                 }
+
+                Spacer(Modifier.height(16f.dp))
+
+                // 界面风格（双 UI：液态玻璃 / 安卓原生·Google 混合）
+                BasicText(AppStrings.get("ui_style"), style = TextStyle(contentColor, AppLayout.bodySize))
+                Spacer(Modifier.height(8f.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(8f.dp)) {
+                    listOf(false to AppStrings.get("ui_style_glass"), true to AppStrings.get("ui_style_native")).forEach { (isNative, name) ->
+                        val sel = AppSettings.nativeUi == isNative
+                        LiquidButton(
+                            onClick = {
+                                AppSettings.nativeUi = isNative
+                                com.example.adbtoolbox.common.GlassEffectConfig.applyUiStyle()
+                                try { GlassEffectPersistence.saveAll() } catch (_: Exception) {}
+                            },
+                            backdrop = backdrop,
+                            modifier = Modifier.height(36f.dp),
+                            tint = if (sel) Color(0xFFAF52DE) else Color.Unspecified
+                        ) {
+                            BasicText(name, Modifier.padding(horizontal = 12f.dp), style = TextStyle(if (sel) Color.White else contentColor, 12f.sp))
+                        }
+                    }
+                }
             }
         }
 

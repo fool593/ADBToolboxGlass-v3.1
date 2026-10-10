@@ -158,4 +158,26 @@ object GlassEffectConfig {
         // 手动改过玻璃参数 = 从此刻起不再让主题强行覆盖（见 AppSettings.themeUserOverrode）
         AppSettings.markThemeUserOverride()
     }
+
+    /** 双 UI 切换：原生风格时把玻璃参数归零（扁平化），玻璃引擎/渲染链不动。 */
+    fun applyUiStyle() {
+        if (com.example.adbtoolbox.common.AppSettings.nativeUi) {
+            globalIntensity.value = 1f
+            homeBlurRadius.value = 0f; homeOpacity.value = 1f
+            homeRefractionHeight.value = 0f; homeRefractionAmount.value = 0f; homeEnableVibrancy.value = false
+            terminalBlurRadius.value = 0f; terminalOpacity.value = 1f
+            terminalRefractionHeight.value = 0f; terminalRefractionAmount.value = 0f; terminalEnableVibrancy.value = false
+            settingsBlurRadius.value = 0f; settingsOpacity.value = 1f
+            settingsRefractionHeight.value = 0f; settingsRefractionAmount.value = 0f; settingsEnableVibrancy.value = false
+            appsBlurRadius.value = 0f; appsOpacity.value = 1f
+            appsRefractionHeight.value = 0f; appsRefractionAmount.value = 0f; appsEnableVibrancy.value = false
+            pluginsBlurRadius.value = 0f; pluginsOpacity.value = 1f
+            pluginsRefractionHeight.value = 0f; pluginsRefractionAmount.value = 0f; pluginsEnableVibrancy.value = false
+            adbmoduleBlurRadius.value = 0f; adbmoduleOpacity.value = 1f
+            adbmoduleRefractionHeight.value = 0f; adbmoduleRefractionAmount.value = 0f; adbmoduleEnableVibrancy.value = false
+            navBlurRadius.value = 0f; navOpacity.value = 1f
+            blurRadius.value = 0f; refractionHeight.value = 0f; refractionAmount.value = 0f
+            enableVibrancy.value = false
+        }
+    }
 }

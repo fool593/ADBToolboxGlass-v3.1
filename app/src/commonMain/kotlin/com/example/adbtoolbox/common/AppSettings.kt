@@ -23,6 +23,8 @@ object AppSettings {
     // 开屏动画开关（v2.9+，落盘键 app_splash_anim）。
     // 关闭后进入软件将不再播放开屏视频，直接进主界面。
     var splashAnimEnabled by mutableStateOf(true)
+    // UI 风格：false=液态玻璃（默认），true=安卓原生/Google 混合扁平风
+    var nativeUi by mutableStateOf(false)
 
     /**
      * 用户在"液态玻璃调节"里手动改过玻璃参数。
