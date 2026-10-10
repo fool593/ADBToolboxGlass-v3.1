@@ -1,6 +1,8 @@
 package com.example.adbtoolbox.common.ui
 
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -12,6 +14,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -36,6 +39,7 @@ import kotlinx.coroutines.withContext
 @Composable
 fun NativeRoot(onSwitchToGlass: () -> Unit) {
     var tab by rememberSaveable { mutableIntStateOf(0) }
+    var navLock by remember { mutableStateOf(false) } // 原生导航纯点击：正在执行任务时仍可点击，无拖动逻辑
     val light = !AppSettings.isDarkMode
     val bg = if (light) Color(0xFFF3F4F6) else Color(0xFF111318)
     val surface = if (light) Color.White else Color(0xFF1C1F26)
@@ -55,15 +59,16 @@ fun NativeRoot(onSwitchToGlass: () -> Unit) {
         }
         when (tab) {
             0 -> NativeHome(onSwitchToGlass, surface, onSurface, sub, accent, light)
-            1 -> NativeTerminal(surface, onSurface, sub, accent)
-            2 -> NativeSettings(onSwitchToGlass, surface, onSurface, sub, accent)
+            1 -> NativeMore(surface, onSurface, sub, accent)
+            2 -> NativeTerminal(surface, onSurface, sub, accent)
+            3 -> NativeSettings(onSwitchToGlass, surface, onSurface, sub, accent)
         }
         // 底部导航（原生风）
         Row(
             Modifier.fillMaxWidth().background(surface).shadow(4.dp).padding(vertical = 10.dp),
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            listOf("首页", "终端", "设置").forEachIndexed { i, label ->
+            listOf("首页", "功能", "终端", "设置").forEachIndexed { i, label ->
                 val sel = tab == i
                 Column(
                     Modifier.weight(1f).clickable { tab = i }.padding(vertical = 6.dp),
@@ -98,9 +103,17 @@ private fun NativeCard(title: String, surface: Color, onSurface: Color, sub: Col
 
 @Composable
 private fun NativeRowButton(label: String, accent: Color, onSurface: Color, modifier: Modifier = Modifier, onClick: () -> Unit) {
+    val interaction = androidx.compose.foundation.interaction.MutableInteractionSource()
+    val pressed by interaction.collectIsPressedAsState()
+    val scale by androidx.compose.animation.core.animateFloatAsState(
+        if (pressed) 0.97f else 1f,
+        androidx.compose.animation.core.spring(dampingRatio = 0.6f, stiffness = 500f)
+    )
     Box(
         modifier.shadow(1.dp, RoundedCornerShape(12.dp)).background(accent.copy(alpha = 0.10f), RoundedCornerShape(12.dp))
-            .clickable(onClick = onClick).padding(horizontal = 14.dp, vertical = 13.dp).fillMaxWidth(),
+            .graphicsLayer { scaleX = scale; scaleY = scale }
+            .clickable(interactionSource = interaction, indication = androidx.compose.foundation.LocalIndication.current) { onClick() }
+            .padding(horizontal = 14.dp, vertical = 13.dp).fillMaxWidth(),
         contentAlignment = Alignment.CenterStart
     ) {
         BasicText(label, style = TextStyle(color = accent, fontSize = 14.sp, fontWeight = FontWeight.Medium))
@@ -206,6 +219,60 @@ private fun NativeSettings(onSwitchToGlass: () -> Unit, surface: Color, onSurfac
                     NativeRowButton(name, if (AppSettings.language == code) accent else sub, onSurface, Modifier.weight(1f)) {
                         AppSettings.language = code
                         try { GlassEffectPersistence.saveAll() } catch (_: Exception) {}
+                    }
+                }
+            }
+        }
+        Spacer(Modifier.height(24.dp))
+    }
+}
+
+@Composable
+private fun NativeMore(surface: Color, onSurface: Color, sub: Color, accent: Color) {
+    var scanResult by remember { mutableStateOf<String?>(null) }
+    var scanning by remember { mutableStateOf(false) }
+    var info by remember { mutableStateOf("…") }
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(Unit) {
+        info = withContext(Dispatchers.Default) {
+            ADBTools.execCommand("getprop ro.surface_flinger.max_frame_buffer_acquired_buffers; settings get system peak_refresh_rate 2>/dev/null", 12).output.trim().ifBlank { "未知" }
+        }
+    }
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+        NativeCard("帧率信息", surface, onSurface, sub) {
+            BasicText(info, style = TextStyle(color = sub, fontSize = 13.sp))
+        }
+        NativeCard("安全护盾（root 全盘扫描）", surface, onSurface, sub) {
+            if (scanResult != null) {
+                BasicText(scanResult!!, style = TextStyle(color = sub, fontSize = 11.sp))
+                Spacer(Modifier.height(8.dp))
+            }
+            NativeRowButton(if (scanning) "扫描中…" else "开始全盘扫描", accent, onSurface) {
+                if (!scanning) {
+                    scanning = true
+                    scope.launch {
+                        scanResult = withContext(Dispatchers.Default) {
+                            val r = com.example.adbtoolbox.common.Shield.scan()
+                            if (r.exitCode == 0) r.output else r.output + "\n" + r.error
+                        }
+                        scanning = false
+                    }
+                }
+            }
+        }
+        NativeCard("下载 / 加载动画（谷歌原生观感）", surface, onSurface, sub) {
+            val trans = androidx.compose.animation.core.rememberInfiniteTransition()
+            val anim by trans.animateFloat(0f, 1f, androidx.compose.animation.core.infiniteRepeatable(androidx.compose.animation.core.tween(1600, easing = androidx.compose.animation.core.LinearEasing)))
+            Box(Modifier.fillMaxWidth().height(6.dp).background(onSurface.copy(alpha = 0.12f), RoundedCornerShape(3.dp))) {
+                Box(Modifier.fillMaxWidth(anim).height(6.dp).background(accent, RoundedCornerShape(3.dp)))
+            }
+            Spacer(Modifier.height(8.dp))
+            BasicText("Material 风格进度条（循环下载动画）", style = TextStyle(color = sub, fontSize = 11.sp))
+            Spacer(Modifier.height(10.dp))
+            NativeRowButton("演示：执行耗时命令", accent, onSurface) {
+                scope.launch {
+                    info = withContext(Dispatchers.Default) {
+                        "find 输出前 20 行：\n" + ADBTools.execCommand("find /sdcard -maxdepth 2 -type f 2>/dev/null | head -n 20", 20).output.trim().take(240)
                     }
                 }
             }
