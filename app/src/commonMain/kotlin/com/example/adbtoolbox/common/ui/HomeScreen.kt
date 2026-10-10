@@ -225,7 +225,7 @@ private fun HomeSection(
         rows.forEach { row ->
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12f.dp)) {
                 row.forEach { (label, color, dest) ->
-                    com.example.adbtoolbox.common.ui.NewUi2.Tile(label, color, Modifier.weight(1f)) { onNavigate(dest) }
+                    QuickActionButton(backdrop, label, color, contentColor, Modifier.weight(1f)) { onNavigate(dest) }
                 }
             }
             Spacer(Modifier.height(10f.dp))
