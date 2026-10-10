@@ -50,6 +50,17 @@ import kotlinx.coroutines.withContext
 
 @Composable
 fun MainContent() {
+    // B 方案：独立原生 UI（与玻璃 UI 完全独立的一套界面），由设置页「界面风格」切换
+    if (com.example.adbtoolbox.common.AppSettings.nativeUi) {
+        com.example.adbtoolbox.common.ui.NativeRoot(
+            onSwitchToGlass = {
+                com.example.adbtoolbox.common.AppSettings.nativeUi = false
+                com.example.adbtoolbox.common.GlassEffectConfig.applyUiStyle()
+                try { com.example.adbtoolbox.common.GlassEffectPersistence.saveAll() } catch (_: Exception) {}
+            }
+        )
+        return
+    }
     val isLightTheme = !AppSettings.isDarkMode
     // 字体颜色：优先使用用户设置的玻璃字体色（必须非透明），否则跟随主题
     val fontColorSetting = GlassEffectConfig.fontColor.value
