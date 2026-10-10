@@ -60,15 +60,16 @@ fun NativeRoot(onSwitchToGlass: () -> Unit) {
         when (tab) {
             0 -> NativeHome(onSwitchToGlass, surface, onSurface, sub, accent, light)
             1 -> NativeMore(surface, onSurface, sub, accent)
-            2 -> NativeTerminal(surface, onSurface, sub, accent)
-            3 -> NativeSettings(onSwitchToGlass, surface, onSurface, sub, accent)
+            2 -> NativeModules(surface, onSurface, sub, accent)
+            3 -> NativeTerminal(surface, onSurface, sub, accent)
+            4 -> NativeSettings(onSwitchToGlass, surface, onSurface, sub, accent)
         }
         // 底部导航（原生风）
         Row(
             Modifier.fillMaxWidth().background(surface).shadow(4.dp).padding(vertical = 10.dp),
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            listOf("首页", "功能", "终端", "设置").forEachIndexed { i, label ->
+            listOf("首页", "功能", "模块", "终端", "设置").forEachIndexed { i, label ->
                 val sel = tab == i
                 Column(
                     Modifier.weight(1f).clickable { tab = i }.padding(vertical = 6.dp),
@@ -275,6 +276,49 @@ private fun NativeMore(surface: Color, onSurface: Color, sub: Color, accent: Col
                         "find 输出前 20 行：\n" + ADBTools.execCommand("find /sdcard -maxdepth 2 -type f 2>/dev/null | head -n 20", 20).output.trim().take(240)
                     }
                 }
+            }
+        }
+        Spacer(Modifier.height(24.dp))
+    }
+}
+
+@Composable
+private fun NativeModules(surface: Color, onSurface: Color, sub: Color, accent: Color) {
+    var fps by remember { mutableStateOf("…") }
+    var modules by remember { mutableStateOf("…") }
+    var restore by remember { mutableStateOf("") }
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(Unit) {
+        val r = withContext(Dispatchers.Default) {
+            ADBTools.execCommand("settings get system peak_refresh_rate 2>/dev/null; dumpsys display 2>/dev/null | grep -iE \"peak|refresh\" | head -n 4", 15)
+        }
+        fps = if (r.exitCode == 0 && r.output.isNotBlank()) r.output.trim() else "未读取到（华为机需走 ADB/Shizuku）"
+        val m = withContext(Dispatchers.Default) {
+            ADBTools.execCommand("su -c ls -1 /data/adb/modules 2>/dev/null || ls /data/adb/modules 2>/dev/null", 12)
+        }
+        modules = if (m.exitCode == 0 && m.output.isNotBlank()) m.output.trim() else "未检测到模块或需 Root/提权"
+    }
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+        NativeCard("游戏帧率", surface, onSurface, sub) {
+            BasicText(fps, style = TextStyle(color = sub, fontSize = 13.sp))
+        }
+        NativeCard("已安装 Root 模块", surface, onSurface, sub) {
+            BasicText(modules, style = TextStyle(color = sub, fontSize = 13.sp))
+        }
+        NativeCard("还原系统默认", surface, onSurface, sub) {
+            BasicText("完整还原（47 键 + 组件 + appops）在玻璃 UI 的「还原系统默认设置」页；此处只读示例值。", style = TextStyle(color = sub, fontSize = 12.sp))
+            Spacer(Modifier.height(8.dp))
+            NativeRowButton("读取受影响设置（示例）", accent, onSurface) {
+                scope.launch {
+                    restore = withContext(Dispatchers.Default) {
+                        val a = ADBTools.execCommand("settings get global window_animation_scale; settings get secure enabled_accessibility_services 2>/dev/null | head -c 80", 12)
+                        a.output.trim().ifBlank { "无输出" }
+                    }
+                }
+            }
+            if (restore.isNotEmpty()) {
+                Spacer(Modifier.height(8.dp))
+                BasicText(restore, style = TextStyle(color = sub, fontSize = 11.sp))
             }
         }
         Spacer(Modifier.height(24.dp))
