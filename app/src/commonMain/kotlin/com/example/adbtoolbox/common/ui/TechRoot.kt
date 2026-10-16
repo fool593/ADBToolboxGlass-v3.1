@@ -429,24 +429,86 @@ private fun TechTerminal() {
 
 @Composable
 private fun TechSettings(onSwitchToGlass: () -> Unit) {
+    val save: () -> Unit = { try { GlassEffectPersistence.saveAll() } catch (_: Exception) {} }
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
         TechCard(AppStrings.get("ui_style")) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 TechButton("液态玻璃", Modifier.weight(1f), onClick = onSwitchToGlass)
                 TechButton("科技风", Modifier.weight(1f), accent = TechGreen) {}
             }
-            Spacer(Modifier.height(10.dp))
-            TechMono(AppStrings.get("language"), TechSub, 13)
-            Spacer(Modifier.height(8.dp))
+        }
+        TechCard("LANGUAGE") {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf("zh" to "中文", "en" to "EN", "hi" to "हिन्दी").forEach { (code, name) ->
                     TechButton(name, Modifier.weight(1f), accent = if (AppSettings.language == code) TechCyan else TechSub) {
-                        AppSettings.language = code
-                        try { GlassEffectPersistence.saveAll() } catch (_: Exception) {}
+                        AppSettings.language = code; save()
                     }
+                }
+            }
+            Spacer(Modifier.height(8.dp))
+            TechMono("LANG = " + AppSettings.language.uppercase(), TechSub)
+        }
+        TechCard("GLASS PARAM // 控制玻璃 UI") {
+            GlassParamRow("BLUR", GlassEffectConfig.blurRadius, 0f..32f, 1f, save)
+            GlassParamRow("REFR.H", GlassEffectConfig.refractionHeight, 0f..1f, 0.05f, save)
+            GlassParamRow("REFR.A", GlassEffectConfig.refractionAmount, 0f..1f, 0.05f, save)
+            GlassParamRow("CHROMA", GlassEffectConfig.chromaticAberration, 0f..1f, 0.05f, save)
+            GlassParamRow("INTENS", GlassEffectConfig.globalIntensity, 0.2f..2f, 0.1f, save)
+            Spacer(Modifier.height(8.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                BasicText("VIBRANCY", modifier = Modifier.weight(1f), style = TextStyle(color = TechSub, fontSize = 11.sp, fontFamily = Mono))
+                TechButton(if (GlassEffectConfig.enableVibrancy.value) "ON" else "OFF", accent = if (GlassEffectConfig.enableVibrancy.value) TechGreen else TechSub, modifier = Modifier.width(72.dp)) {
+                    GlassEffectConfig.enableVibrancy.value = !GlassEffectConfig.enableVibrancy.value; save()
+                }
+            }
+            Spacer(Modifier.height(6.dp))
+            TechMono("BLUR 控制首页玻璃模糊；切回液态玻璃立即生效。", TechSub, 10)
+        }
+        TechCard("SYSTEM") {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                BasicText("DARK MODE", modifier = Modifier.weight(1f), style = TextStyle(color = TechSub, fontSize = 11.sp, fontFamily = Mono))
+                TechButton(if (AppSettings.isDarkMode) "ON" else "OFF", accent = if (AppSettings.isDarkMode) TechGreen else TechSub, modifier = Modifier.width(72.dp)) {
+                    AppSettings.isDarkMode = !AppSettings.isDarkMode; save()
+                }
+            }
+            Spacer(Modifier.height(8.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                BasicText("SPLASH ANIM", modifier = Modifier.weight(1f), style = TextStyle(color = TechSub, fontSize = 11.sp, fontFamily = Mono))
+                TechButton(if (AppSettings.splashAnimEnabled) "ON" else "OFF", accent = if (AppSettings.splashAnimEnabled) TechGreen else TechSub, modifier = Modifier.width(72.dp)) {
+                    AppSettings.splashAnimEnabled = !AppSettings.splashAnimEnabled; save()
                 }
             }
         }
         Spacer(Modifier.height(24.dp))
+    }
+}
+
+/** 步进参数行：[- 值 +]，控制玻璃参数（切回玻璃 UI 生效）。 */
+@Composable
+private fun GlassParamRow(label: String, state: MutableState<Float>, range: ClosedFloatingPointRange<Float>, step: Float, save: () -> Unit) {
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+        BasicText(label, modifier = Modifier.weight(1f), style = TextStyle(color = TechSub, fontSize = 11.sp, fontFamily = Mono))
+        TechMini("-", TechCyan) { state.value = (state.value - step).coerceIn(range); save() }
+        BasicText(
+            state.value.toString().take(4),
+            modifier = Modifier.padding(horizontal = 6.dp), style = TextStyle(color = TechOn, fontSize = 11.sp, fontFamily = Mono)
+        )
+        TechMini("+", TechCyan) { state.value = (state.value + step).coerceIn(range); save() }
+    }
+}
+
+@Composable
+private fun TechMini(label: String, accent: Color, onClick: () -> Unit) {
+    val interaction = remember { MutableInteractionSource() }
+    val pressed by interaction.collectIsPressedAsState()
+    val scale by animateFloatAsState(if (pressed) 0.92f else 1f, spring(dampingRatio = 0.6f, stiffness = 520f))
+    Box(
+        Modifier.size(30.dp).graphicsLayer { scaleX = scale; scaleY = scale }
+            .background(accent.copy(alpha = 0.10f), RoundedCornerShape(7.dp))
+            .border(1.dp, accent.copy(alpha = 0.5f), RoundedCornerShape(7.dp))
+            .clickable(interactionSource = interaction, indication = null) { onClick() },
+        contentAlignment = Alignment.Center
+    ) {
+        BasicText(label, style = TextStyle(color = accent, fontSize = 13.sp, fontFamily = Mono, fontWeight = FontWeight.Bold))
     }
 }
