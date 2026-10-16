@@ -479,6 +479,25 @@ private fun TechSettings(onSwitchToGlass: () -> Unit) {
                 }
             }
         }
+        TechCard("ABOUT") {
+            TechMono("ADB TOOLBOX v3.1 // TECH EDITION", TechGreen, 12)
+            Spacer(Modifier.height(6.dp))
+            TechMono("https://github.com/fool593/ADBToolboxGlass-v3.1", TechSub, 10)
+        }
+        TechCard("RESET") {
+            val amber = Color(0xFFFFB74D)
+            TechButton("恢复玻璃参数默认", accent = amber) {
+                GlassEffectConfig.blurRadius.value = 16f
+                GlassEffectConfig.refractionHeight.value = 0.2f
+                GlassEffectConfig.refractionAmount.value = 0.2f
+                GlassEffectConfig.chromaticAberration.value = 0f
+                GlassEffectConfig.enableVibrancy.value = true
+                GlassEffectConfig.globalIntensity.value = 1f
+                save()
+            }
+            Spacer(Modifier.height(6.dp))
+            TechMono("RESET -> 默认玻璃参数（16dp / 0.2 / 0.2 / 0 / ON / 1.0）", TechSub, 10)
+        }
         Spacer(Modifier.height(24.dp))
     }
 }
