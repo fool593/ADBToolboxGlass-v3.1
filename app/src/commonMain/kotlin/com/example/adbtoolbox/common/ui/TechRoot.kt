@@ -113,7 +113,7 @@ fun TechRoot(onSwitchToGlass: () -> Unit) {
                 .padding(vertical = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(2.dp)
         ) {
-            listOf("首页", "功能", "模块", "全部", "终端", "设置").forEachIndexed { i, label ->
+            listOf(AppStrings.get("tech_tab_home"), AppStrings.get("tech_tab_func"), AppStrings.get("tech_tab_mods"), AppStrings.get("tech_tab_all"), AppStrings.get("tech_tab_term"), AppStrings.get("tech_tab_setup")).forEachIndexed { i, label ->
                 TechNavItem(
                     sel = tab == i,
                     label = label,
@@ -218,15 +218,15 @@ private fun TechHome(onSwitchToGlass: () -> Unit) {
             kotlinx.coroutines.delay(260); l2 = true
             kotlinx.coroutines.delay(400); l3 = true
         }
-        TechCard("BOOT SEQ") {
+        TechCard(AppStrings.get("tech_boot_seq")) {
             TechMono(if (l1) "[ OK ] SYS.LOAD  v3.1" else "......", color = if (l1) TechGreen else TechSub)
             Spacer(Modifier.height(4.dp))
             TechMono(if (l2) "[ OK ] ADB.LINK  ONLINE" else "......", color = if (l2) TechGreen else TechSub)
             Spacer(Modifier.height(4.dp))
             TechMono(if (l3) "[ OK ] UI.MODE   TECH" else "......", color = if (l3) TechGreen else TechSub)
         }
-        TechCard("DEVICE") { TechMono(deviceInfo.ifBlank { "..." }, TechOn) }
-        TechCard("QUICK OPS") {
+        TechCard(AppStrings.get("tech_device")) { TechMono(deviceInfo.ifBlank { "..." }, TechOn) }
+        TechCard(AppStrings.get("tech_quick_ops")) {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 TechButton(AppStrings.get("adb_panel")) {
                     scope.launch {
@@ -255,8 +255,8 @@ private fun TechHome(onSwitchToGlass: () -> Unit) {
                 TechMono(result, TechGreen, 11)
             }
         }
-        TechCard("UI MODE") {
-            TechButton("切回液态玻璃", accent = TechGreen, onClick = onSwitchToGlass)
+        TechCard(AppStrings.get("tech_ui_mode")) {
+            TechButton(AppStrings.get("tech_switch_glass"), accent = TechGreen, onClick = onSwitchToGlass)
         }
         Spacer(Modifier.height(24.dp))
     }
@@ -274,13 +274,13 @@ private fun TechMore() {
         }
     }
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
-        TechCard("REFRESH") { TechMono(info, TechOn) }
-        TechCard("SHIELD SCAN (root)") {
+        TechCard(AppStrings.get("tech_refresh")) { TechMono(info, TechOn) }
+        TechCard(AppStrings.get("tech_shield")) {
             if (scanResult != null) {
                 TechMono(scanResult!!, TechSub, 11)
                 Spacer(Modifier.height(8.dp))
             }
-            TechButton(if (scanning) "SCANNING..." else "START FULL SCAN", accent = if (scanning) TechSub else TechCyan) {
+            TechButton(if (scanning) AppStrings.get("tech_scanning") else AppStrings.get("tech_scan_start"), accent = if (scanning) TechSub else TechCyan) {
                 if (!scanning) {
                     scanning = true
                     scope.launch {
@@ -291,7 +291,7 @@ private fun TechMore() {
                 }
             }
         }
-        TechCard("PROGRESS // LOAD") {
+        TechCard(AppStrings.get("tech_progress")) {
             val trans = rememberInfiniteTransition()
             val anim by trans.animateFloat(0f, 1f, infiniteRepeatable(tween(1500, easing = LinearEasing)))
             Box(
@@ -332,9 +332,9 @@ private fun TechModules() {
         modules = if (m.exitCode == 0 && m.output.isNotBlank()) m.output.trim() else "NONE / NEED ROOT"
     }
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
-        TechCard("GAME FPS") { TechMono(fps, TechOn) }
-        TechCard("ROOT MODULES") { TechMono(modules, TechOn) }
-        TechCard("RESTORE INFO") {
+        TechCard(AppStrings.get("tech_game_fps")) { TechMono(fps, TechOn) }
+        TechCard(AppStrings.get("tech_root_mods")) { TechMono(modules, TechOn) }
+        TechCard(AppStrings.get("tech_restore_info")) {
             TechMono("完整还原（47 键 + 组件 + appops）在玻璃 UI「还原系统默认设置」页；此处只读。", TechSub, 11)
             Spacer(Modifier.height(8.dp))
             TechButton("读取受影响设置（示例）") {
@@ -370,7 +370,7 @@ private fun TechAll() {
         Triple("截图到下载（真实操作）", "screencap -p /sdcard/Download/tech_shot.png && echo saved", "SHOT")
     )
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
-        TechCard("ALL FEATURES") {
+        TechCard(AppStrings.get("tech_all_features")) {
             rows.forEach { (label, cmd, tag) ->
                 TechButton("[$tag] $label") {
                     scope.launch {
@@ -387,7 +387,7 @@ private fun TechAll() {
                 TechMono(out, TechGreen, 11)
             }
         }
-        TechCard("NOTE") {
+        TechCard(AppStrings.get("tech_note")) {
             TechMono("深度流程（GhostLock 一键/全量还原/模块刷入）保留在玻璃 UI 对应页；此处为独立原生入口与真实回读。", TechSub, 11)
         }
         Spacer(Modifier.height(24.dp))
@@ -409,7 +409,7 @@ private fun TechTerminal() {
             BasicText("> $input" + (if (tOn > 0.5f) "▌" else " "), style = TextStyle(color = TechCyan, fontSize = 13.sp, fontFamily = Mono))
         }
         Spacer(Modifier.height(10.dp))
-        TechButton("EXEC") {
+        TechButton(AppStrings.get("tech_exec")) {
             scope.launch {
                 output = withContext(Dispatchers.Default) { ADBTools.execCommand(input.trim(), 15).output.trim() }
             }
@@ -437,7 +437,7 @@ private fun TechSettings(onSwitchToGlass: () -> Unit) {
                 TechButton("科技风", Modifier.weight(1f), accent = TechGreen) {}
             }
         }
-        TechCard("LANGUAGE") {
+        TechCard(AppStrings.get("tech_lang")) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf("zh" to "中文", "en" to "EN", "hi" to "हिन्दी").forEach { (code, name) ->
                     TechButton(name, Modifier.weight(1f), accent = if (AppSettings.language == code) TechCyan else TechSub) {
@@ -448,7 +448,7 @@ private fun TechSettings(onSwitchToGlass: () -> Unit) {
             Spacer(Modifier.height(8.dp))
             TechMono("LANG = " + AppSettings.language.uppercase(), TechSub)
         }
-        TechCard("GLASS PARAM // 控制玻璃 UI") {
+        TechCard(AppStrings.get("tech_glass_panel")) {
             GlassParamRow("BLUR", GlassEffectConfig.blurRadius, 0f..32f, 1f, save)
             GlassParamRow("REFR.H", GlassEffectConfig.refractionHeight, 0f..1f, 0.05f, save)
             GlassParamRow("REFR.A", GlassEffectConfig.refractionAmount, 0f..1f, 0.05f, save)
@@ -464,27 +464,27 @@ private fun TechSettings(onSwitchToGlass: () -> Unit) {
             Spacer(Modifier.height(6.dp))
             TechMono("BLUR 控制首页玻璃模糊；切回液态玻璃立即生效。", TechSub, 10)
         }
-        TechCard("SYSTEM") {
+        TechCard(AppStrings.get("tech_system")) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                BasicText("DARK MODE", modifier = Modifier.weight(1f), style = TextStyle(color = TechSub, fontSize = 11.sp, fontFamily = Mono))
+                BasicText(AppStrings.get("tech_dark"), modifier = Modifier.weight(1f), style = TextStyle(color = TechSub, fontSize = 11.sp, fontFamily = Mono))
                 TechButton(if (AppSettings.isDarkMode) "ON" else "OFF", accent = if (AppSettings.isDarkMode) TechGreen else TechSub, modifier = Modifier.width(72.dp)) {
                     AppSettings.isDarkMode = !AppSettings.isDarkMode; save()
                 }
             }
             Spacer(Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                BasicText("SPLASH ANIM", modifier = Modifier.weight(1f), style = TextStyle(color = TechSub, fontSize = 11.sp, fontFamily = Mono))
+                BasicText(AppStrings.get("tech_splash"), modifier = Modifier.weight(1f), style = TextStyle(color = TechSub, fontSize = 11.sp, fontFamily = Mono))
                 TechButton(if (AppSettings.splashAnimEnabled) "ON" else "OFF", accent = if (AppSettings.splashAnimEnabled) TechGreen else TechSub, modifier = Modifier.width(72.dp)) {
                     AppSettings.splashAnimEnabled = !AppSettings.splashAnimEnabled; save()
                 }
             }
         }
-        TechCard("ABOUT") {
+        TechCard(AppStrings.get("tech_about")) {
             TechMono("ADB TOOLBOX v3.1 // TECH EDITION", TechGreen, 12)
             Spacer(Modifier.height(6.dp))
             TechMono("https://github.com/fool593/ADBToolboxGlass-v3.1", TechSub, 10)
         }
-        TechCard("RESET") {
+        TechCard(AppStrings.get("tech_reset")) {
             val amber = Color(0xFFFFB74D)
             TechButton("恢复玻璃参数默认", accent = amber) {
                 GlassEffectConfig.blurRadius.value = 16f
