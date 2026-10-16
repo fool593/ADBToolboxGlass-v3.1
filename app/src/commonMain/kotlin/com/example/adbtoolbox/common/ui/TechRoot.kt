@@ -21,7 +21,9 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.TextStyle
@@ -55,7 +57,17 @@ private val Mono = FontFamily.Monospace
 @Composable
 fun TechRoot(onSwitchToGlass: () -> Unit) {
     var tab by rememberSaveable { mutableIntStateOf(0) }
-    Column(Modifier.fillMaxSize().background(TechBg)) {
+    Column(
+        Modifier.fillMaxSize().background(TechBg).drawBehind {
+            // 科技扫描线：每 3dp 一条 2% 透明度细线（一次绘制，零逐帧成本）
+            val step = 3.dp.toPx()
+            var yy = 0f
+            while (yy < size.height) {
+                drawLine(color = TechCyan.copy(alpha = 0.018f), start = Offset(0f, yy), end = Offset(size.width, yy), strokeWidth = 1f)
+                yy += step
+            }
+        }
+    ) {
         // 顶栏：HUD 标题 + 状态点
         Box(
             Modifier.fillMaxWidth().background(TechSurface)
@@ -121,8 +133,12 @@ fun TechRoot(onSwitchToGlass: () -> Unit) {
 
 @Composable
 private fun TechCard(title: String, content: @Composable () -> Unit) {
+    var shown by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { kotlinx.coroutines.delay(120); shown = true }
+    val vis by animateFloatAsState(if (shown) 1f else 0f, tween(380, easing = androidx.compose.animation.core.FastOutSlowInEasing))
     Column(
         Modifier.fillMaxWidth().padding(horizontal = 12.dp).padding(top = 12.dp)
+            .graphicsLayer { alpha = vis; translationY = (1f - vis) * 10f.dp.toPx() }
             .shadow(6.dp, RoundedCornerShape(12.dp), spotColor = TechCyan.copy(alpha = 0.18f))
             .background(TechSurface, RoundedCornerShape(12.dp))
             .border(1.dp, TechCyan.copy(alpha = 0.35f), RoundedCornerShape(12.dp))
@@ -351,7 +367,9 @@ private fun TechTerminal() {
             Modifier.fillMaxWidth().background(TechSurface, RoundedCornerShape(10.dp))
                 .border(1.dp, TechCyan.copy(alpha = 0.5f), RoundedCornerShape(10.dp)).padding(12.dp)
         ) {
-            BasicText("> $input", style = TextStyle(color = TechCyan, fontSize = 13.sp, fontFamily = Mono))
+            val tc = rememberInfiniteTransition()
+            val tOn by tc.animateFloat(0f, 1f, infiniteRepeatable(tween(500, easing = LinearEasing)))
+            BasicText("> $input" + (if (tOn > 0.5f) "▌" else " "), style = TextStyle(color = TechCyan, fontSize = 13.sp, fontFamily = Mono))
         }
         Spacer(Modifier.height(10.dp))
         TechButton("EXEC") {
