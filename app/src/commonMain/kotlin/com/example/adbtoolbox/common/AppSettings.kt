@@ -1408,6 +1408,20 @@ object AppStrings {
         "tech_splash" to "SPLASH ANIM",
         "tech_on" to "ON",
         "tech_off" to "OFF",
+        "tech_lang_cur" to "LANG =",
+        "tech_demo_cmd" to "演示：执行耗时命令",
+        "tech_find_prefix" to "find:",
+        "tech_restore_full" to "完整还原（47 键 + 组件 + appops）在玻璃 UI「还原系统默认设置」页；此处只读。",
+        "tech_read_example" to "读取受影响设置（示例）",
+        "tech_deep_note" to "深度流程（GhostLock 一键/全量还原/模块刷入）保留在玻璃 UI 对应页；此处为独立原生入口与真实回读。",
+        "tech_reset_default" to "恢复玻璃参数默认",
+        "tech_reset_note" to "RESET -> 默认玻璃参数（16dp / 0.2 / 0.2 / 0 / ON / 1.0）",
+        "tech_mods_none" to "未检测到模块或需 Root/提权",
+        "tech_shot_label" to "截图到下载（真实操作）",
+        "tech_no_device" to "NO DEVICE",
+        "tech_na" to "N/A",
+        "tech_hw_adb" to "HW/ADB REQUIRED",
+        "tech_none_root" to "NONE / NEED ROOT",
     )
 
     private val enStrings = mapOf(
@@ -2753,6 +2767,20 @@ object AppStrings {
         "tech_splash" to "SPLASH ANIM",
         "tech_on" to "ON",
         "tech_off" to "OFF",
+        "tech_lang_cur" to "LANG =",
+        "tech_demo_cmd" to "Demo: run a slow command",
+        "tech_find_prefix" to "find:",
+        "tech_restore_full" to "Full restore (47 keys + components + appops) lives in the glass UI's Restore page; read-only here.",
+        "tech_read_example" to "Read affected settings (sample)",
+        "tech_deep_note" to "Deep flows (GhostLock one-tap / full restore / module flash) stay in the glass UI pages; this tab provides real read-back entry points.",
+        "tech_reset_default" to "Restore default glass params",
+        "tech_reset_note" to "RESET -> defaults (16dp / 0.2 / 0.2 / 0 / ON / 1.0)",
+        "tech_mods_none" to "No modules detected or root/privilege needed",
+        "tech_shot_label" to "Screenshot to Downloads (real)",
+        "tech_no_device" to "NO DEVICE",
+        "tech_na" to "N/A",
+        "tech_hw_adb" to "HW/ADB REQUIRED",
+        "tech_none_root" to "NONE / NEED ROOT",
     )
     private val hiStrings = mapOf(
         // सामान्य
@@ -4073,8 +4101,24 @@ object AppStrings {
         "tech_splash" to "SPLASH ANIM",
         "tech_on" to "ON",
         "tech_off" to "OFF",
+        "tech_lang_cur" to "LANG =",
+        "tech_demo_cmd" to "डेमो: धीमी कमांड",
+        "tech_find_prefix" to "find:",
+        "tech_restore_full" to "पूर्ण पुनर्स्थापना ग्लास UI में है; यहाँ केवल पठनीय।",
+        "tech_read_example" to "प्रभावित सेटिंग पढ़ें (नमूना)",
+        "tech_deep_note" to "गहरी प्रक्रियाएँ ग्लास UI में; यहाँ वास्तविक रीड-बैक।",
+        "tech_reset_default" to "डिफ़ॉल्ट ग्लास पैरामीटर",
+        "tech_reset_note" to "RESET -> डिफ़ॉल्ट (16dp / 0.2 / 0.2 / 0 / ON / 1.0)",
+        "tech_mods_none" to "कोई मॉड्यूल नहीं / रूट चाहिए",
+        "tech_shot_label" to "स्क्रीनशॉट डाउनलोड (वास्तविक)",
+        "tech_no_device" to "NO DEVICE",
+        "tech_na" to "N/A",
+        "tech_hw_adb" to "HW/ADB REQUIRED",
+        "tech_none_root" to "NONE / NEED ROOT",
     )
 }
+
+
 
 
 

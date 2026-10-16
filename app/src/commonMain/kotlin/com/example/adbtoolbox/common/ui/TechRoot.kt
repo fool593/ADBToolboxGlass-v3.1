@@ -205,7 +205,7 @@ private fun TechHome(onSwitchToGlass: () -> Unit) {
     LaunchedEffect(Unit) {
         deviceInfo = withContext(Dispatchers.Default) {
             val b = ADBTools.execCommand("getprop ro.product.brand; getprop ro.product.model; getprop ro.build.version.release", 10).output.trim()
-            if (b.isBlank()) "NO DEVICE" else b.replace('\n', ' ')
+            if (b.isBlank()) AppStrings.get("tech_no_device") else b.replace('\n', ' ')
         }
     }
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
@@ -270,7 +270,7 @@ private fun TechMore() {
     val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         info = withContext(Dispatchers.Default) {
-            ADBTools.execCommand("getprop ro.surface_flinger.max_frame_buffer_acquired_buffers; settings get system peak_refresh_rate 2>/dev/null", 12).output.trim().ifBlank { "N/A" }
+            ADBTools.execCommand("getprop ro.surface_flinger.max_frame_buffer_acquired_buffers; settings get system peak_refresh_rate 2>/dev/null", 12).output.trim().ifBlank { AppStrings.get("tech_na") }
         }
     }
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
@@ -303,10 +303,10 @@ private fun TechMore() {
             Spacer(Modifier.height(8.dp))
             TechMono("NEON DETERMINATE BAR / LOOP", TechSub, 10)
             Spacer(Modifier.height(10.dp))
-            TechButton("演示：执行耗时命令") {
+            TechButton(AppStrings.get("tech_demo_cmd")) {
                 scope.launch {
                     info = withContext(Dispatchers.Default) {
-                        "find: " + ADBTools.execCommand("find /sdcard -maxdepth 2 -type f 2>/dev/null | head -n 20", 20).output.trim().take(240)
+                        AppStrings.get("tech_find_prefix") + ADBTools.execCommand("find /sdcard -maxdepth 2 -type f 2>/dev/null | head -n 20", 20).output.trim().take(240)
                     }
                 }
             }
@@ -325,19 +325,19 @@ private fun TechModules() {
         val r = withContext(Dispatchers.Default) {
             ADBTools.execCommand("settings get system peak_refresh_rate 2>/dev/null; dumpsys display 2>/dev/null | grep -iE \"peak|refresh\" | head -n 4", 15)
         }
-        fps = if (r.exitCode == 0 && r.output.isNotBlank()) r.output.trim() else "HW/ADB REQUIRED"
+        fps = if (r.exitCode == 0 && r.output.isNotBlank()) r.output.trim() else AppStrings.get("tech_hw_adb")
         val m = withContext(Dispatchers.Default) {
             ADBTools.execCommand("su -c ls -1 /data/adb/modules 2>/dev/null || ls /data/adb/modules 2>/dev/null", 12)
         }
-        modules = if (m.exitCode == 0 && m.output.isNotBlank()) m.output.trim() else "NONE / NEED ROOT"
+        modules = if (m.exitCode == 0 && m.output.isNotBlank()) m.output.trim() else AppStrings.get("tech_none_root")
     }
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
         TechCard(AppStrings.get("tech_game_fps")) { TechMono(fps, TechOn) }
         TechCard(AppStrings.get("tech_root_mods")) { TechMono(modules, TechOn) }
         TechCard(AppStrings.get("tech_restore_info")) {
-            TechMono("完整还原（47 键 + 组件 + appops）在玻璃 UI「还原系统默认设置」页；此处只读。", TechSub, 11)
+            TechMono(AppStrings.get("tech_restore_full"), TechSub, 11)
             Spacer(Modifier.height(8.dp))
-            TechButton("读取受影响设置（示例）") {
+            TechButton(AppStrings.get("tech_read_example")) {
                 scope.launch {
                     restore = withContext(Dispatchers.Default) {
                         val a = ADBTools.execCommand("settings get global window_animation_scale; settings get secure enabled_accessibility_services 2>/dev/null | head -c 80", 12)
@@ -367,7 +367,7 @@ private fun TechAll() {
         Triple("还原默认（真实读受影响键）", "settings get global window_animation_scale; settings get system font_scale; settings get secure backup_enabled", "RESTORE"),
         Triple("内核提权探测（真实 uname+su）", "uname -r; su -c id 2>/dev/null || id", "KROOT"),
         Triple("Root 工具（真实探测）", "su -c id 2>/dev/null || echo no-root; getprop ro.product.device", "ROOT"),
-        Triple("截图到下载（真实操作）", "screencap -p /sdcard/Download/tech_shot.png && echo saved", "SHOT")
+        Triple(AppStrings.get("tech_shot_label"), "screencap -p /sdcard/Download/tech_shot.png && echo saved", "SHOT")
     )
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
         TechCard(AppStrings.get("tech_all_features")) {
@@ -388,7 +388,7 @@ private fun TechAll() {
             }
         }
         TechCard(AppStrings.get("tech_note")) {
-            TechMono("深度流程（GhostLock 一键/全量还原/模块刷入）保留在玻璃 UI 对应页；此处为独立原生入口与真实回读。", TechSub, 11)
+            TechMono(AppStrings.get("tech_deep_note"), TechSub, 11)
         }
         Spacer(Modifier.height(24.dp))
     }
@@ -446,7 +446,7 @@ private fun TechSettings(onSwitchToGlass: () -> Unit) {
                 }
             }
             Spacer(Modifier.height(8.dp))
-            TechMono("LANG = " + AppSettings.language.uppercase(), TechSub)
+            TechMono(AppStrings.get("tech_lang_cur") + AppSettings.language.uppercase(), TechSub)
         }
         TechCard(AppStrings.get("tech_glass_panel")) {
             GlassParamRow("BLUR", GlassEffectConfig.blurRadius, 0f..32f, 1f, save)
@@ -486,7 +486,7 @@ private fun TechSettings(onSwitchToGlass: () -> Unit) {
         }
         TechCard(AppStrings.get("tech_reset")) {
             val amber = Color(0xFFFFB74D)
-            TechButton("恢复玻璃参数默认", accent = amber) {
+            TechButton(AppStrings.get("tech_reset_default"), accent = amber) {
                 GlassEffectConfig.blurRadius.value = 16f
                 GlassEffectConfig.refractionHeight.value = 0.2f
                 GlassEffectConfig.refractionAmount.value = 0.2f
@@ -496,7 +496,7 @@ private fun TechSettings(onSwitchToGlass: () -> Unit) {
                 save()
             }
             Spacer(Modifier.height(6.dp))
-            TechMono("RESET -> 默认玻璃参数（16dp / 0.2 / 0.2 / 0 / ON / 1.0）", TechSub, 10)
+            TechMono(AppStrings.get("tech_reset_note"), TechSub, 10)
         }
         Spacer(Modifier.height(24.dp))
     }
