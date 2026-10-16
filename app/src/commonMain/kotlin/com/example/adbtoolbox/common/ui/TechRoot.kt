@@ -62,16 +62,19 @@ fun TechRoot(onSwitchToGlass: () -> Unit) {
                 .border(0.5.dp, TechCyan.copy(alpha = 0.35f))
                 .padding(horizontal = 18.dp, vertical = 14.dp)
         ) {
+            // HUD 角落括号装饰
+            Box(Modifier.align(Alignment.TopStart).size(7.dp).border(1.dp, TechCyan.copy(alpha = 0.6f)).padding(0.dp))
+            Box(Modifier.align(Alignment.BottomEnd).size(7.dp).border(1.dp, TechCyan.copy(alpha = 0.6f)).padding(0.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 val blink = rememberInfiniteTransition()
                 val on by blink.animateFloat(0f, 1f, infiniteRepeatable(tween(600), repeatMode = androidx.compose.animation.core.RepeatMode.Reverse))
                 Box(
                     Modifier.size(8.dp).background(if (on > 0.5f) TechGreen else TechGreen.copy(alpha = 0.3f), RoundedCornerShape(4.dp))
                 )
-                Spacer(Modifier.width(8.dp))
+                Spacer(Modifier.width(10.dp))
                 BasicText(
                     "ADB TOOLBOX // " + listOf("HOME", "FUNC", "MODS", "ALL", "TERM", "SETUP")[tab],
-                    style = TextStyle(color = TechCyan, fontSize = 15.sp, fontWeight = FontWeight.Bold, fontFamily = Mono)
+                    style = TextStyle(color = TechCyan, fontSize = 14.sp, fontWeight = FontWeight.Bold, fontFamily = Mono, letterSpacing = 1.5.sp)
                 )
             }
         }
@@ -141,9 +144,9 @@ private fun TechButton(label: String, modifier: Modifier = Modifier, accent: Col
     val scale by animateFloatAsState(if (pressed) 0.96f else 1f, spring(dampingRatio = 0.6f, stiffness = 520f))
     Box(
         modifier.graphicsLayer { scaleX = scale; scaleY = scale }
-            .shadow(4.dp, RoundedCornerShape(10.dp), spotColor = accent.copy(alpha = 0.25f))
-            .background(accent.copy(alpha = 0.08f), RoundedCornerShape(10.dp))
-            .border(1.dp, accent.copy(alpha = 0.55f), RoundedCornerShape(10.dp))
+            .shadow(if (pressed) 9.dp else 4.dp, RoundedCornerShape(10.dp), spotColor = accent.copy(alpha = if (pressed) 0.4f else 0.25f))
+            .background(accent.copy(alpha = if (pressed) 0.16f else 0.08f), RoundedCornerShape(10.dp))
+            .border(1.dp, if (pressed) accent else accent.copy(alpha = 0.55f), RoundedCornerShape(10.dp))
             .clickable(interactionSource = interaction, indication = null) { onClick() }
             .padding(horizontal = 14.dp, vertical = 12.dp).fillMaxWidth(),
         contentAlignment = Alignment.CenterStart
