@@ -209,6 +209,22 @@ private fun TechHome(onSwitchToGlass: () -> Unit) {
         }
     }
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+        // 开机自检动画（科技开屏动效）：三行等宽信息错峰亮起
+        var l1 by remember { mutableStateOf(false) }
+        var l2 by remember { mutableStateOf(false) }
+        var l3 by remember { mutableStateOf(false) }
+        LaunchedEffect(Unit) {
+            kotlinx.coroutines.delay(120); l1 = true
+            kotlinx.coroutines.delay(260); l2 = true
+            kotlinx.coroutines.delay(400); l3 = true
+        }
+        TechCard("BOOT SEQ") {
+            TechMono(if (l1) "[ OK ] SYS.LOAD  v3.1" else "......", color = if (l1) TechGreen else TechSub)
+            Spacer(Modifier.height(4.dp))
+            TechMono(if (l2) "[ OK ] ADB.LINK  ONLINE" else "......", color = if (l2) TechGreen else TechSub)
+            Spacer(Modifier.height(4.dp))
+            TechMono(if (l3) "[ OK ] UI.MODE   TECH" else "......", color = if (l3) TechGreen else TechSub)
+        }
         TechCard("DEVICE") { TechMono(deviceInfo.ifBlank { "..." }, TechOn) }
         TechCard("QUICK OPS") {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
