@@ -52,7 +52,7 @@ import kotlinx.coroutines.withContext
 fun MainContent() {
     // B 方案：独立原生 UI（与玻璃 UI 完全独立的一套界面），由设置页「界面风格」切换
     if (com.example.adbtoolbox.common.AppSettings.nativeUi) {
-        com.example.adbtoolbox.common.ui.NativeRoot(
+        com.example.adbtoolbox.common.ui.TechRoot(
             onSwitchToGlass = {
                 com.example.adbtoolbox.common.AppSettings.nativeUi = false
                 com.example.adbtoolbox.common.GlassEffectConfig.applyUiStyle()

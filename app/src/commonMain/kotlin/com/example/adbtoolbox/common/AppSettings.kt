@@ -1372,6 +1372,9 @@ object AppStrings {
         "kroot_adv_status" to "状态记录",
         "kroot_adv_klog" to "导出内核日志",
         "kroot_adv_uname" to "内核信息 (uname -r)",
+        "ui_style" to "界面风格（双 UI）",
+        "ui_style_glass" to "液态玻璃",
+        "ui_style_native" to "科技风（第二 UI）",
     )
 
     private val enStrings = mapOf(
@@ -2681,6 +2684,9 @@ object AppStrings {
         "kroot_adv_status" to "Status record",
         "kroot_adv_klog" to "Dump kernel log",
         "kroot_adv_uname" to "Kernel info (uname -r)",
+        "ui_style" to "UI style (dual)",
+        "ui_style_glass" to "Liquid Glass",
+        "ui_style_native" to "Tech UI (2nd interface)",
     )
     private val hiStrings = mapOf(
         // सामान्य
@@ -3965,8 +3971,12 @@ object AppStrings {
         "kroot_adv_status" to "स्टेटस रिकॉर्ड",
         "kroot_adv_klog" to "कर्नल लॉग डंप",
         "kroot_adv_uname" to "कर्नल जानकारी",
+        "ui_style" to "UI शैली",
+        "ui_style_glass" to "लिक्विड ग्लास",
+        "ui_style_native" to "टेक UI",
     )
 }
+
 
 
 
