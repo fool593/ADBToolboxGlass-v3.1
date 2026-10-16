@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.TextStyle
@@ -90,6 +91,13 @@ fun TechRoot(onSwitchToGlass: () -> Unit) {
                 )
             }
         }
+        // 霓虹渐变分割线
+        Box(
+            Modifier.fillMaxWidth().height(2.dp).background(
+                Brush.horizontalGradient(listOf(TechCyan, TechGreen))
+            )
+        )
+
         when (tab) {
             0 -> TechHome(onSwitchToGlass)
             1 -> TechMore()
@@ -106,28 +114,41 @@ fun TechRoot(onSwitchToGlass: () -> Unit) {
             horizontalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             listOf("首页", "功能", "模块", "全部", "终端", "设置").forEachIndexed { i, label ->
-                val sel = tab == i
-                Column(
-                    Modifier.weight(1f).clickable { tab = i }.padding(vertical = 8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    BasicText(
-                        label,
-                        style = TextStyle(
-                            color = if (sel) TechCyan else TechSub,
-                            fontSize = 12.sp,
-                            fontFamily = Mono,
-                            fontWeight = if (sel) FontWeight.Bold else FontWeight.Normal
-                        )
-                    )
-                    Spacer(Modifier.height(3.dp))
-                    Box(
-                        Modifier.fillMaxWidth(if (sel) 0.5f else 0f).height(2.dp)
-                            .background(if (sel) TechCyan else Color.Transparent, RoundedCornerShape(1.dp))
-                    )
-                }
+                TechNavItem(
+                    sel = tab == i,
+                    label = label,
+                    accent = TechCyan,
+                    sub = TechSub,
+                    modifier = Modifier.weight(1f),
+                    onClick = { tab = i }
+                )
             }
         }
+    }
+}
+
+/** 底部导航项：指示条宽度动画滑动（spring）。 */
+@Composable
+private fun TechNavItem(sel: Boolean, label: String, accent: Color, sub: Color, modifier: Modifier = Modifier, onClick: () -> Unit) {
+    val frac by animateFloatAsState(if (sel) 0.55f else 0f, spring(dampingRatio = 0.72f, stiffness = 380f))
+    Column(
+        modifier.clickable { onClick() }.padding(vertical = 8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        BasicText(
+            label,
+            style = TextStyle(
+                color = if (sel) accent else sub,
+                fontSize = 12.sp,
+                fontFamily = Mono,
+                fontWeight = if (sel) FontWeight.Bold else FontWeight.Normal
+            )
+        )
+        Spacer(Modifier.height(3.dp))
+        Box(
+            Modifier.fillMaxWidth(frac).height(2.dp)
+                .background(if (sel) accent else Color.Transparent, RoundedCornerShape(1.dp))
+        )
     }
 }
 
