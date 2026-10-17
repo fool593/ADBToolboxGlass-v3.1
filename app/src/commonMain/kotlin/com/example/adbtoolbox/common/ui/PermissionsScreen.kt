@@ -193,7 +193,8 @@ fun PermissionsScreen(
 
         // 权限能力提示：不可用时给出可操作入口，而不是让点击静默失败
         if (privileged == false) {
-            GlassCard(backdrop = backdrop, pageType = "apps") {
+            StaggeredCard(0) {
+    GlassCard(backdrop = backdrop, pageType = "apps") {
                 Column(Modifier.padding(AppLayout.cardPadCompact)) {
                     BasicText(
                         "${AppStrings.get("need_root_or_shizuku")} · ${AppStrings.get("authorization_required")}",
@@ -222,12 +223,14 @@ fun PermissionsScreen(
                     }
                 }
             }
+    }
             Spacer(Modifier.height(10f.dp))
         }
 
         // 操作结果 / 进行中提示
         if (resultMessage.isNotEmpty()) {
-            GlassCard(backdrop = backdrop, pageType = "apps") {
+            StaggeredCard(1) {
+    GlassCard(backdrop = backdrop, pageType = "apps") {
                 Column(Modifier.padding(AppLayout.cardPadCompact)) {
                     BasicText(
                         resultMessage,
@@ -235,6 +238,7 @@ fun PermissionsScreen(
                     )
                 }
             }
+    }
             Spacer(Modifier.height(10f.dp))
         }
 
@@ -296,7 +300,8 @@ fun PermissionsScreen(
 
             // 撤销二次确认
             pendingRevoke?.let { perm ->
-                GlassCard(backdrop = backdrop, pageType = "apps") {
+                StaggeredCard(2) {
+    GlassCard(backdrop = backdrop, pageType = "apps") {
                     Column(Modifier.padding(14f.dp)) {
                         BasicText(
                             "${AppStrings.get("revoke")} ${perm.name}?",
@@ -309,6 +314,7 @@ fun PermissionsScreen(
                         }
                     }
                 }
+    }
                 Spacer(Modifier.height(10f.dp))
             }
 
