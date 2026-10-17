@@ -103,7 +103,8 @@ fun DeviceInfoScreen(
         }
         Spacer(Modifier.height(AppLayout.sectionGap))
 
-        GlassCard(backdrop = backdrop, pageType = "home") {
+        StaggeredCard(0) {
+    GlassCard(backdrop = backdrop, pageType = "home") {
             Column(Modifier.padding(AppLayout.cardPad)) {
                 SectionTitle(AppStrings.get("device_info"), contentColor)
                 deviceInfo?.let { info ->
@@ -120,11 +121,13 @@ fun DeviceInfoScreen(
                 }
             }
         }
+    }
 
         Spacer(Modifier.height(16.dp))
 
         // 刷新率：显示真实测量值，并在被锁 60Hz 时提供一键修复
-        GlassCard(backdrop = backdrop, pageType = "home") {
+        StaggeredCard(1) {
+    GlassCard(backdrop = backdrop, pageType = "home") {
             Column(Modifier.padding(AppLayout.cardPad)) {
                 SectionTitle(AppStrings.get("refresh_rate"), contentColor)
                 InfoRow(
@@ -197,10 +200,12 @@ fun DeviceInfoScreen(
                 }
             }
         }
+    }
 
         Spacer(Modifier.height(AppLayout.sectionGap))
 
-        GlassCard(backdrop = backdrop, pageType = "home") {
+        StaggeredCard(2) {
+    GlassCard(backdrop = backdrop, pageType = "home") {
             Column(Modifier.padding(AppLayout.cardPad)) {
                 SectionTitle("${AppStrings.get("storage")} & ${AppStrings.get("memory")}", contentColor)
                 deviceInfo?.let { info ->
@@ -211,10 +216,12 @@ fun DeviceInfoScreen(
                 }
             }
         }
+    }
 
         Spacer(Modifier.height(AppLayout.sectionGap))
 
-        GlassCard(backdrop = backdrop, pageType = "home") {
+        StaggeredCard(3) {
+    GlassCard(backdrop = backdrop, pageType = "home") {
             Column(Modifier.padding(AppLayout.cardPad)) {
                 SectionTitle(AppStrings.get("root_status"), contentColor)
                 deviceInfo?.let { info ->
@@ -225,6 +232,7 @@ fun DeviceInfoScreen(
                 }
             }
         }
+    }
 
         Spacer(Modifier.height(80f.dp))
     }
