@@ -150,7 +150,8 @@ fun ADBPanelScreen(
 
         // 高危操作二次确认
         pendingOp?.let { op ->
-            GlassCard(backdrop = backdrop, pageType = "home") {
+            StaggeredCard(0) {
+    GlassCard(backdrop = backdrop, pageType = "home") {
                 Column(Modifier.padding(AppLayout.cardPad)) {
                     BasicText(
                         adbPanelStr("danger_operation_title", "⚠️ 危险操作，请确认", "⚠️ Dangerous operation"),
@@ -182,11 +183,13 @@ fun ADBPanelScreen(
                     }
                 }
             }
+    }
             Spacer(Modifier.height(AppLayout.sectionGap))
         }
 
         // 设备控制
-        GlassCard(backdrop = backdrop, pageType = "home") {
+        StaggeredCard(1) {
+    GlassCard(backdrop = backdrop, pageType = "home") {
             Column(Modifier.padding(20f.dp)) {
                 SectionTitle(AppStrings.get("device_control"), contentColor)
                 Row(horizontalArrangement = Arrangement.spacedBy(8f.dp)) {
@@ -202,11 +205,13 @@ fun ADBPanelScreen(
                 }
             }
         }
+    }
 
         Spacer(Modifier.height(AppLayout.sectionGap))
 
         // 系统设置
-        GlassCard(backdrop = backdrop, pageType = "home") {
+        StaggeredCard(2) {
+    GlassCard(backdrop = backdrop, pageType = "home") {
             Column(Modifier.padding(20f.dp)) {
                 SectionTitle(AppStrings.get("system_settings"), contentColor)
                 Row(horizontalArrangement = Arrangement.spacedBy(8f.dp)) {
@@ -217,11 +222,13 @@ fun ADBPanelScreen(
                 }
             }
         }
+    }
 
         Spacer(Modifier.height(AppLayout.sectionGap))
 
         // 清理操作
-        GlassCard(backdrop = backdrop, pageType = "home") {
+        StaggeredCard(3) {
+    GlassCard(backdrop = backdrop, pageType = "home") {
             Column(Modifier.padding(20f.dp)) {
                 SectionTitle(AppStrings.get("cleanup_operations"), contentColor)
                 Row(horizontalArrangement = Arrangement.spacedBy(8f.dp)) {
@@ -230,12 +237,14 @@ fun ADBPanelScreen(
                 }
             }
         }
+    }
 
         Spacer(Modifier.height(AppLayout.sectionGap))
 
         // 执行结果
         if (resultOutput.isNotEmpty()) {
-            GlassCard(backdrop = backdrop, pageType = "home") {
+            StaggeredCard(4) {
+    GlassCard(backdrop = backdrop, pageType = "home") {
                 Column(Modifier.padding(AppLayout.cardPad)) {
                     SectionTitle(AppStrings.get("output"), contentColor)
                     BasicText(
@@ -244,6 +253,7 @@ fun ADBPanelScreen(
                     )
                 }
             }
+    }
         }
 
         Spacer(Modifier.height(80f.dp))
