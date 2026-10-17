@@ -1430,6 +1430,8 @@ object AppStrings {
         "tech_tab_dl" to "下载",
         "kroot_adv_prefix" to "Advanced:",
         "kroot_probe_label" to "--- root 探测 ---",
+        "terminal_hide" to "Hide",
+        "terminal_show" to "Show",
     )
 
     private val enStrings = mapOf(
@@ -2797,6 +2799,8 @@ object AppStrings {
         "tech_tab_dl" to "DL",
         "kroot_adv_prefix" to "高级：",
         "kroot_probe_label" to "--- root probe ---",
+        "terminal_hide" to "隐藏",
+        "terminal_show" to "显示",
     )
     private val hiStrings = mapOf(
         // सामान्य
@@ -4139,8 +4143,11 @@ object AppStrings {
         "tech_tab_dl" to "डाउनलोड",
         "kroot_adv_prefix" to "एडवांस:",
         "kroot_probe_label" to "--- रूट जांच ---",
+        "terminal_hide" to "छिपाएँ",
+        "terminal_show" to "दिखाएँ",
     )
 }
+
 
 
 

@@ -389,7 +389,7 @@ fun QuickCommandPanel(
             QuickCmdButton(backdrop, QuickCmdCategory.SYSTEM.title, if (currentCategory == QuickCmdCategory.SYSTEM) Color(0xFF0088FF) else contentColor) {
                 onCategoryChange(QuickCmdCategory.SYSTEM)
             }
-            QuickCmdButton(backdrop, if (showPanel) "Hide" else "Show", contentColor) {
+            QuickCmdButton(backdrop, if (showPanel) AppStrings.get("terminal_hide") else AppStrings.get("terminal_show"), contentColor) {
                 onTogglePanel()
             }
         }
