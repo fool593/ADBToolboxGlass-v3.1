@@ -132,7 +132,8 @@ fun RootManagerScreen(
         }
         Spacer(Modifier.height(AppLayout.sectionGap))
 
-        GlassCard(backdrop = backdrop, pageType = "plugins") {
+        StaggeredCard(0) {
+    GlassCard(backdrop = backdrop, pageType = "plugins") {
             Column(Modifier.padding(20f.dp)) {
                 SectionTitle(AppStrings.get("root_status"), contentColor)
                 InfoRow(AppStrings.get("root_permission"), if (isRooted) AppStrings.get("root_obtained") else AppStrings.get("root_not_obtained"), contentColor)
@@ -162,12 +163,14 @@ fun RootManagerScreen(
                 }
             }
         }
+    }
 
         Spacer(Modifier.height(AppLayout.sectionGap))
 
         // 破坏性命令二次确认
         pendingCmd?.let { cmd ->
-            GlassCard(backdrop = backdrop, pageType = "plugins") {
+            StaggeredCard(1) {
+    GlassCard(backdrop = backdrop, pageType = "plugins") {
                 Column(Modifier.padding(AppLayout.cardPad)) {
                     BasicText(
                         adbPanelStr("danger_operation_title", "⚠️ 危险操作，请确认", "⚠️ Dangerous operation"),
@@ -191,10 +194,12 @@ fun RootManagerScreen(
                     }
                 }
             }
+    }
             Spacer(Modifier.height(AppLayout.sectionGap))
         }
 
-        GlassCard(backdrop = backdrop, pageType = "plugins") {
+        StaggeredCard(2) {
+    GlassCard(backdrop = backdrop, pageType = "plugins") {
             Column(Modifier.padding(20f.dp)) {
                 SectionTitle(AppStrings.get("root_quick_commands"), contentColor)
                 Spacer(Modifier.height(8f.dp))
@@ -211,11 +216,13 @@ fun RootManagerScreen(
                 }
             }
         }
+    }
 
         Spacer(Modifier.height(AppLayout.sectionGap))
 
         if (resultOutput.isNotEmpty()) {
-            GlassCard(backdrop = backdrop, pageType = "plugins") {
+            StaggeredCard(3) {
+    GlassCard(backdrop = backdrop, pageType = "plugins") {
                 Column(Modifier.padding(AppLayout.cardPad)) {
                     SectionTitle(AppStrings.get("execution_result"), contentColor)
                     BasicText(
@@ -224,6 +231,7 @@ fun RootManagerScreen(
                     )
                 }
             }
+    }
         }
 
         Spacer(Modifier.height(80f.dp))
