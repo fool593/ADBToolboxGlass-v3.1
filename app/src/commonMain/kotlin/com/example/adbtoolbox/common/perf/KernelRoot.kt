@@ -118,7 +118,7 @@ object KernelRoot {
         return@withContext CommandResult(
             output = buildString {
                 append(run.output.trim())
-                append("\n--- root 探测 ---\n")
+                append("\n" + com.example.adbtoolbox.common.AppStrings.get("kroot_probe_label") + "\n")
                 append(probe)
             },
             error = run.error,
@@ -161,7 +161,7 @@ object KernelRoot {
             CommandResult(
                 output = buildString {
                     append(run.output.trim())
-                    append("\n--- root 探测 ---\n")
+                    append("\n" + com.example.adbtoolbox.common.AppStrings.get("kroot_probe_label") + "\n")
                     append(probe)
                 },
                 error = run.error,

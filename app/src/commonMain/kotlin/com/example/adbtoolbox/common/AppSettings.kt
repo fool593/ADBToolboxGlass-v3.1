@@ -1428,6 +1428,8 @@ object AppStrings {
         "tech_flash" to "模块刷入（Download 第一个 zip）",
         "tech_ghost" to "GhostLock 一键（官方 CLI）",
         "tech_tab_dl" to "下载",
+        "kroot_adv_prefix" to "Advanced:",
+        "kroot_probe_label" to "--- root 探测 ---",
     )
 
     private val enStrings = mapOf(
@@ -2793,6 +2795,8 @@ object AppStrings {
         "tech_flash" to "Flash module (first zip in Download)",
         "tech_ghost" to "GhostLock one-tap (official CLI)",
         "tech_tab_dl" to "DL",
+        "kroot_adv_prefix" to "高级：",
+        "kroot_probe_label" to "--- root probe ---",
     )
     private val hiStrings = mapOf(
         // सामान्य
@@ -4133,8 +4137,11 @@ object AppStrings {
         "tech_flash" to "मॉड्यूल फ्लैश",
         "tech_ghost" to "घोस्टलॉक वन-टैप",
         "tech_tab_dl" to "डाउनलोड",
+        "kroot_adv_prefix" to "एडवांस:",
+        "kroot_probe_label" to "--- रूट जांच ---",
     )
 }
+
 
 
 

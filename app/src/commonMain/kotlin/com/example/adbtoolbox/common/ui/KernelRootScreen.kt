@@ -324,7 +324,7 @@ Column(
                             }
                             ghFlags = flags
                             ghAdvBusy = true
-                            statusText = "Advanced: " + flags
+                            statusText = AppStrings.get("kroot_adv_prefix") + flags
                             scope.launch {
                                 val r = withContext(Dispatchers.Default) {
                                     if (flags == "uname -r") com.example.adbtoolbox.common.ADBTools.execCommand("uname -r", 15)
