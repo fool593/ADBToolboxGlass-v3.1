@@ -1422,6 +1422,11 @@ object AppStrings {
         "tech_na" to "N/A",
         "tech_hw_adb" to "HW/ADB REQUIRED",
         "tech_none_root" to "NONE / NEED ROOT",
+        "tech_deep" to "DEEP OPS（真实执行）",
+        "tech_perf" to "性能加速（动画 0.5x）",
+        "tech_restore_anim" to "还原动画（1x）",
+        "tech_flash" to "模块刷入（Download 第一个 zip）",
+        "tech_ghost" to "GhostLock 一键（官方 CLI）",
     )
 
     private val enStrings = mapOf(
@@ -2781,6 +2786,11 @@ object AppStrings {
         "tech_na" to "N/A",
         "tech_hw_adb" to "HW/ADB REQUIRED",
         "tech_none_root" to "NONE / NEED ROOT",
+        "tech_deep" to "DEEP OPS (real exec)",
+        "tech_perf" to "Performance boost (anim 0.5x)",
+        "tech_restore_anim" to "Restore animations (1x)",
+        "tech_flash" to "Flash module (first zip in Download)",
+        "tech_ghost" to "GhostLock one-tap (official CLI)",
     )
     private val hiStrings = mapOf(
         // सामान्य
@@ -4115,8 +4125,14 @@ object AppStrings {
         "tech_na" to "N/A",
         "tech_hw_adb" to "HW/ADB REQUIRED",
         "tech_none_root" to "NONE / NEED ROOT",
+        "tech_deep" to "DEEP OPS",
+        "tech_perf" to "प्रदर्शन बूस्ट",
+        "tech_restore_anim" to "एनिमेशन पुनर्स्थापित",
+        "tech_flash" to "मॉड्यूल फ्लैश",
+        "tech_ghost" to "घोस्टलॉक वन-टैप",
     )
 }
+
 
 
 

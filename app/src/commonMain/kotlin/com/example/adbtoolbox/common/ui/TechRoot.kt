@@ -357,6 +357,7 @@ private fun TechModules() {
 @Composable
 private fun TechAll() {
     var out by remember { mutableStateOf("") }
+    var deepOut by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
     val rows = listOf(
         Triple("权限（真实列出）", "cmd appops get --uid all 2>/dev/null | head -n 6", "PERMS"),
@@ -385,6 +386,60 @@ private fun TechAll() {
             if (out.isNotEmpty()) {
                 Spacer(Modifier.height(8.dp))
                 TechMono(out, TechGreen, 11)
+            }
+        }
+        TechCard(AppStrings.get("tech_deep")) {
+            TechButton(AppStrings.get("tech_perf")) {
+                scope.launch {
+                    deepOut = withContext(Dispatchers.Default) {
+                        ADBTools.execCommand("settings put global window_animation_scale 0.5; settings put global transition_animation_scale 0.5; settings put global animator_duration_scale 0.5; settings get global window_animation_scale", 20).output.trim()
+                    }
+                }
+            }
+            Spacer(Modifier.height(6.dp))
+            TechButton(AppStrings.get("tech_restore_anim")) {
+                scope.launch {
+                    deepOut = withContext(Dispatchers.Default) {
+                        ADBTools.execCommand("settings put global window_animation_scale 1; settings put global transition_animation_scale 1; settings put global animator_duration_scale 1; settings get global window_animation_scale", 20).output.trim()
+                    }
+                }
+            }
+            Spacer(Modifier.height(6.dp))
+            TechButton(AppStrings.get("tech_flash")) {
+                scope.launch {
+                    deepOut = withContext(Dispatchers.Default) {
+                        val z = ADBTools.execCommand("ls /sdcard/Download/*.zip 2>/dev/null | head -n 1", 10).output.trim()
+                        if (z.isBlank()) "(NO ZIP in /sdcard/Download)"
+                        else com.example.adbtoolbox.common.ADBTools.installModuleViaRoot(z).take(300)
+                    }
+                }
+            }
+            Spacer(Modifier.height(6.dp))
+            TechButton(AppStrings.get("tech_ghost")) {
+                scope.launch {
+                    deepOut = withContext(Dispatchers.Default) {
+                        try {
+                            val ex = com.example.adbtoolbox.common.ADBTools.extractAssetKit("ghostlock-vivo")
+                            if (ex.exitCode != 0) "kit extract failed: " + ex.error
+                            else {
+                                val push = com.example.adbtoolbox.common.ADBTools.prepareAndPushKit(ex.output.trim(), "kx_tech")
+                                if (push.exitCode != 0) "push failed: " + push.error
+                                else {
+                                    val lines = push.output.lineSequence().filter { it.isNotBlank() }.toList()
+                                    val entry = lines.getOrNull(0)?.trim() ?: ""
+                                    if (entry == "NO_RUNNABLE_ENTRY") "(kit: data only, no runnable entry)"
+                                    else com.example.adbtoolbox.common.perf.KernelRoot.runGhostlockCli(entry, "--ghostlock-app-call", 120).output.take(300)
+                                }
+                            }
+                        } catch (e: Exception) {
+                            "err: " + (e.message ?: "")
+                        }
+                    }
+                }
+            }
+            if (deepOut.isNotEmpty()) {
+                Spacer(Modifier.height(8.dp))
+                TechMono(deepOut, TechGreen, 11)
             }
         }
         TechCard(AppStrings.get("tech_note")) {
