@@ -1427,6 +1427,7 @@ object AppStrings {
         "tech_restore_anim" to "还原动画（1x）",
         "tech_flash" to "模块刷入（Download 第一个 zip）",
         "tech_ghost" to "GhostLock 一键（官方 CLI）",
+        "tech_tab_dl" to "下载",
     )
 
     private val enStrings = mapOf(
@@ -2791,6 +2792,7 @@ object AppStrings {
         "tech_restore_anim" to "Restore animations (1x)",
         "tech_flash" to "Flash module (first zip in Download)",
         "tech_ghost" to "GhostLock one-tap (official CLI)",
+        "tech_tab_dl" to "DL",
     )
     private val hiStrings = mapOf(
         // सामान्य
@@ -4130,8 +4132,10 @@ object AppStrings {
         "tech_restore_anim" to "एनिमेशन पुनर्स्थापित",
         "tech_flash" to "मॉड्यूल फ्लैश",
         "tech_ghost" to "घोस्टलॉक वन-टैप",
+        "tech_tab_dl" to "डाउनलोड",
     )
 }
+
 
 
 

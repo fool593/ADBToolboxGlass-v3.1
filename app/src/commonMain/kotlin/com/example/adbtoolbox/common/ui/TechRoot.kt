@@ -86,7 +86,7 @@ fun TechRoot(onSwitchToGlass: () -> Unit) {
                 )
                 Spacer(Modifier.width(10.dp))
                 BasicText(
-                    "ADB TOOLBOX // " + listOf("HOME", "FUNC", "MODS", "ALL", "TERM", "SETUP")[tab],
+                    "ADB TOOLBOX // " + listOf("HOME", "FUNC", "MODS", "ALL", "DL", "TERM", "SETUP")[tab],
                     style = TextStyle(color = TechCyan, fontSize = 14.sp, fontWeight = FontWeight.Bold, fontFamily = Mono, letterSpacing = 1.1.sp)
                 )
             }
@@ -103,8 +103,9 @@ fun TechRoot(onSwitchToGlass: () -> Unit) {
             1 -> TechMore()
             2 -> TechModules()
             3 -> TechAll()
-            4 -> TechTerminal()
-            5 -> TechSettings(onSwitchToGlass)
+            4 -> TechDownload()
+            5 -> TechTerminal()
+            6 -> TechSettings(onSwitchToGlass)
         }
         // 底部导航：霓虹横线指示
         Row(
@@ -113,7 +114,7 @@ fun TechRoot(onSwitchToGlass: () -> Unit) {
                 .padding(vertical = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(2.dp)
         ) {
-            listOf(AppStrings.get("tech_tab_home"), AppStrings.get("tech_tab_func"), AppStrings.get("tech_tab_mods"), AppStrings.get("tech_tab_all"), AppStrings.get("tech_tab_term"), AppStrings.get("tech_tab_setup")).forEachIndexed { i, label ->
+            listOf(AppStrings.get("tech_tab_home"), AppStrings.get("tech_tab_func"), AppStrings.get("tech_tab_mods"), AppStrings.get("tech_tab_all"), AppStrings.get("tech_tab_dl"), AppStrings.get("tech_tab_term"), AppStrings.get("tech_tab_setup")).forEachIndexed { i, label ->
                 TechNavItem(
                     sel = tab == i,
                     label = label,
@@ -479,6 +480,81 @@ private fun TechTerminal() {
                 style = TextStyle(color = TechGreen, fontSize = 12.sp, fontFamily = Mono)
             )
         }
+    }
+}
+
+/** 多线程下载器页：URL → 线程数 → 开始/断点继续 → 进度。 */
+@Composable
+private fun TechDownload() {
+    var url by remember { mutableStateOf("") }
+    var dest by remember { mutableStateOf("/sdcard/Download/fw.zip") }
+    var threads by remember { mutableStateOf(4) }
+    var done by remember { mutableStateOf(0L) }
+    var total by remember { mutableStateOf(0L) }
+    var status by remember { mutableStateOf("") }
+    var running by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+        TechCard("DOWNLOADER // 多线程") {
+            androidx.compose.foundation.text.BasicTextField(
+                value = url,
+                onValueChange = { url = it },
+                singleLine = true,
+                textStyle = TextStyle(color = TechCyan, fontSize = 12.sp, fontFamily = Mono),
+                modifier = Modifier.fillMaxWidth().background(TechBg, RoundedCornerShape(8.dp))
+                    .border(1.dp, TechCyan.copy(alpha = 0.4f), RoundedCornerShape(8.dp)).padding(10.dp)
+            )
+            Spacer(Modifier.height(6.dp))
+            androidx.compose.foundation.text.BasicTextField(
+                value = dest,
+                onValueChange = { dest = it },
+                singleLine = true,
+                textStyle = TextStyle(color = TechOn, fontSize = 11.sp, fontFamily = Mono),
+                modifier = Modifier.fillMaxWidth().background(TechBg, RoundedCornerShape(8.dp))
+                    .border(1.dp, TechCyan.copy(alpha = 0.25f), RoundedCornerShape(8.dp)).padding(10.dp)
+            )
+            Spacer(Modifier.height(8.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                BasicText("THREADS", modifier = Modifier.weight(1f), style = TextStyle(color = TechSub, fontSize = 11.sp, fontFamily = Mono))
+                TechMini("-", TechCyan) { threads = (threads - 1).coerceAtLeast(1) }
+                BasicText(threads.toString(), modifier = Modifier.padding(horizontal = 8.dp), style = TextStyle(color = TechOn, fontSize = 12.sp, fontFamily = Mono))
+                TechMini("+", TechCyan) { threads = (threads + 1).coerceAtMost(8) }
+            }
+            Spacer(Modifier.height(10.dp))
+            val frac = if (total > 0L) (done.toFloat() / total.toFloat()).coerceIn(0f, 1f) else 0f
+            Box(
+                Modifier.fillMaxWidth().height(6.dp).background(TechSurface, RoundedCornerShape(3.dp))
+                    .border(1.dp, TechCyan.copy(alpha = 0.4f), RoundedCornerShape(3.dp))
+            ) {
+                Box(Modifier.fillMaxWidth(frac).height(6.dp).background(TechCyan, RoundedCornerShape(3.dp)))
+            }
+            Spacer(Modifier.height(6.dp))
+            TechMono(
+                if (total > 0L) (done / 1048576).toString() + " MB / " + (total / 1048576) + " MB (" + (frac * 100).toInt() + "%)" else "waiting URL",
+                if (running) TechCyan else TechSub, 11
+            )
+            if (status.isNotEmpty()) {
+                Spacer(Modifier.height(4.dp))
+                TechMono(status, if (status.startsWith("OK")) TechGreen else Color(0xFFFFB74D), 11)
+            }
+            Spacer(Modifier.height(10.dp))
+            TechButton(if (running) "DOWNLOADING..." else "START / RESUME", accent = if (running) TechSub else TechCyan) {
+                if (!running && url.isNotBlank()) {
+                    running = true
+                    status = ""
+                    scope.launch {
+                        val r = com.example.adbtoolbox.common.Downloader.download(url, dest, threads) { d, t ->
+                            done = d; total = t
+                        }
+                        status = r.message
+                        running = false
+                    }
+                }
+            }
+            Spacer(Modifier.height(6.dp))
+            TechMono("断点续传：中断后再次点 START/RESUME 从断点继续（元数据 .dlm + .part 分片）。", TechSub, 10)
+        }
+        Spacer(Modifier.height(24.dp))
     }
 }
 
