@@ -1,7 +1,7 @@
 {
   "schema": "adb-releases/v1",
   "source": "https://github.com/fool593/ADBToolboxGlass-v3.1/releases",
-  "syncedAt": "2026-11-05T19:12:26.626Z",
+  "syncedAt": "2026-11-05T20:14:29.609Z",
   "via": "local-build",
   "stale": false,
   "releases": [
@@ -17,13 +17,13 @@
         {
           "name": "ADBToolboxGlass-v3.1-.-release.apk",
           "size": 10634282,
-          "downloads": 8,
+          "downloads": 13,
           "url": "https://github.com/fool593/ADBToolboxGlass-v3.1/releases/download/v3.1/ADBToolboxGlass-v3.1-.-release.apk"
         },
         {
           "name": "ADBToolboxGlass-v3.1-.zip",
           "size": 13032917,
-          "downloads": 1,
+          "downloads": 2,
           "url": "https://github.com/fool593/ADBToolboxGlass-v3.1/releases/download/v3.1/ADBToolboxGlass-v3.1-.zip"
         },
         {
