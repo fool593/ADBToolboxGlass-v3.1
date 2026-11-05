@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-theme-mode="system">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#eef2f8" />
+  <title>源码下载 — ADB 工具箱 v3.1 官方站</title>
+  <meta name="description" content="ADB 工具箱源码下载：GitHub 仓库、克隆命令、源码 zip、许可证（Apache-2.0）与编译环境说明。" />
+  <meta property="og:title" content="源码下载 — ADB 工具箱 v3.1 官方站" />
+  <meta property="og:description" content="ADB 工具箱源码与许可证（Apache-2.0）。" />
+  <meta property="og:image" content="./assets/site-banner-B7flzujM.jpg" />
+  <link rel="icon" type="image/png" href="./icon-192.png" />
+  <link rel="canonical" href="https://fool593.github.io/ADBToolboxGlass-v3.1/source.html" />
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('adb-theme') || 'system';
+        var sys = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', t === 'system' ? (sys ? 'dark' : 'light') : t);
+        var l = localStorage.getItem('adb-lang');
+        document.documentElement.setAttribute('lang', (l === 'zh' || l === 'en') ? (l === 'zh' ? 'zh-CN' : 'en') : 'zh-CN');
+      } catch (e) {}
+    })();
+  </script>
+  <script type="module" crossorigin src="./assets/site-main-BQHyWJK2.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/site-style-CDiowuqV.css">
+</head>
+<body>
+  <canvas id="bg-layer" aria-hidden="true"></canvas>
+  <div id="bg-blobs" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <img src="./icon-192.png" alt="ADB Toolbox" width="34" height="34" />
+        <span>ADB 工具箱 <small>v3.1</small></span>
+      </a>
+      <nav class="nav-links" aria-label="主导航">
+        <a href="index.html" data-i18n="nav.home">首页</a>
+        <a href="index.html#download" data-i18n="nav.download">下载</a>
+        <a href="versions.html" data-i18n="nav.versions">历史版本</a>
+        <a href="bugs.html" data-i18n="nav.bugs">Bug 记录</a>
+        <a href="changelog.html" data-i18n="nav.changelog">更新日志</a>
+        <a href="source.html" data-i18n="nav.source">源码</a>
+      </nav>
+      <div class="top-actions">
+        <button class="chip" id="lang-toggle" aria-label="切换语言">EN</button>
+        <button class="chip" id="theme-toggle" aria-label="切换主题">◐</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" style="padding-top:56px">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">SOURCE</div>
+          <h2 data-i18n="source.title">源码与构建</h2>
+          <p data-i18n="source.sub">全部源码托管于 GitHub，以下信息与仓库 README 一致（真实数据）。</p>
+        </div>
+
+        <div class="lg-glass doc-card">
+          <h2>📦 仓库</h2>
+          <p class="doc-date"><a href="https://github.com/fool593/ADBToolboxGlass-v3.1" rel="noopener">github.com/fool593/ADBToolboxGlass-v3.1</a>（默认分支 master · Apache-2.0）</p>
+          <pre class="code-block">git clone https://github.com/fool593/ADBToolboxGlass-v3.1.git</pre>
+          <h2>⬇ 源码包（GitHub Releases 真实资产）</h2>
+          <div class="dl-row">
+            <a class="btn primary small" href="https://github.com/fool593/ADBToolboxGlass-v3.1/releases/download/v3.1/ADBToolboxGlass-v3.1-.zip" rel="noopener"><span class="dl-icon">⬇</span> 源码 zip · 13.0 MB</a>
+            <a class="btn ghost small" href="https://github.com/fool593/ADBToolboxGlass-v3.1/releases/download/v3.1/ADBToolboxGlass-v3.1-git.zip" rel="noopener">git 完整历史 zip · 31.3 MB</a>
+          </div>
+          <p class="dl-meta" style="margin-top:10px">📌 注：GitHub 资产名中的中文"稳定版"被平台强制替换为 <code>-.-</code>，属平台 ASCII 化行为，文件本身不受影响。</p>
+        </div>
+
+        <div class="split" style="margin-top:24px">
+          <div class="lg-glass doc-card">
+            <h2>🛠 编译环境</h2>
+            <ul>
+              <li>安卓工程：<code>androidApp/</code>（KMP 共享模块 <code>app/</code>）</li>
+              <li>iOS 工程：<code>iosApp/</code>（含 Xcode 工程）</li>
+              <li>构建：<code>.\gradlew.bat :androidApp:assembleDebug</code> / <code>assembleRelease</code></li>
+              <li>内核提权组件 GhostLock：NDK r29 原生二进制（arm64）</li>
+              <li>依赖 AGPL 组件（安全护盾）：iill392/youlong-security（见发布声明）</li>
+            </ul>
+          </div>
+          <div class="lg-glass doc-card">
+            <h2>📁 目录结构</h2>
+            <ul>
+              <li><code>androidApp/</code> — Android 应用壳与应用资源</li>
+              <li><code>app/</code> — KMP 共享代码（Liquid 组件/玻璃 UI）</li>
+              <li><code>backdrop/</code> — Liquid Glass (Backdrop) 设计实现</li>
+              <li><code>iosApp/</code> — iOS 工程（Xcode）</li>
+              <li><code>docs/</code> — 使用说明（华为性能指南等）</li>
+              <li><code>artworks/</code> — 官网与商店用图</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="lg-glass doc-card" style="margin-top:24px">
+          <h2>📄 许可证</h2>
+          <p>本项目以 <strong>Apache License 2.0</strong> 发布。<a href="https://github.com/fool593/ADBToolboxGlass-v3.1/blob/master/LICENSE" rel="noopener">查看 LICENSE 全文</a>。</p>
+          <p style="margin-top:8px">⚠️ 组件级许可：安全护盾引用 AGPL 组件（iill392/youlong-security），按发布声明需核对 LICENSE/NOTICE 后分发。</p>
+        </div>
+
+        <p style="margin-top:18px"><a href="index.html" data-i18n="source.back">← 返回首页</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div>
+        <p class="copy" data-i18n="footer.copyright">© 2026 fool593 · Apache-2.0 项目</p>
+        <p class="copy" style="margin-top:6px;max-width:60ch" data-i18n="footer.disclaimer">本工具涉及系统级与内核级操作（有数据丢失/变砖风险），请仅在自有设备、接受风险、已备份的前提下使用。</p>
+      </div>
+      <div class="links">
+        <span data-i18n="footer.links">相关链接</span>
+        <a href="https://github.com/fool593/ADBToolboxGlass-v3.1" rel="noopener" data-i18n="footer.repo">GitHub 仓库</a>
+        <a href="https://github.com/fool593/ADBToolboxGlass-v3.1/releases" rel="noopener" data-i18n="footer.releases">Releases</a>
+        <a href="https://github.com/fool593/ADBToolboxGlass-v3.1/issues" rel="noopener" data-i18n="footer.issue">反馈问题</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="perf-badge" id="perf-badge"></div>
+</body>
+</html>

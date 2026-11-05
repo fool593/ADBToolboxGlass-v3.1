@@ -1,0 +1,5 @@
+# GitHub Pages 站点
+User-agent: *
+Allow: /
+
+Sitemap: https://fool593.github.io/ADBToolboxGlass-v3.1/sitemap.xml

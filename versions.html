@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-theme-mode="system">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#eef2f8" />
+  <title>历史版本 — ADB 工具箱 v3.1 官方站</title>
+  <meta name="description" content="ADB 工具箱（ADBToolboxGlass）历史版本列表：由 GitHub Releases 真实数据生成，当前发布 v3.1 稳定版。" />
+  <meta property="og:title" content="历史版本 — ADB 工具箱 v3.1 官方站" />
+  <meta property="og:description" content="ADB 工具箱历史版本与下载资产（GitHub Releases 真实数据）。" />
+  <meta property="og:image" content="./assets/site-banner-B7flzujM.jpg" />
+  <link rel="icon" type="image/png" href="./icon-192.png" />
+  <link rel="canonical" href="https://fool593.github.io/ADBToolboxGlass-v3.1/versions.html" />
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('adb-theme') || 'system';
+        var sys = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', t === 'system' ? (sys ? 'dark' : 'light') : t);
+        var l = localStorage.getItem('adb-lang');
+        document.documentElement.setAttribute('lang', (l === 'zh' || l === 'en') ? (l === 'zh' ? 'zh-CN' : 'en') : 'zh-CN');
+      } catch (e) {}
+    })();
+  </script>
+  <script type="module" crossorigin src="./assets/site-versions-Di9YZ7FP.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/site-main-BQHyWJK2.js">
+  <link rel="stylesheet" crossorigin href="./assets/site-style-CDiowuqV.css">
+</head>
+<body>
+  <canvas id="bg-layer" aria-hidden="true"></canvas>
+  <div id="bg-blobs" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <img src="./icon-192.png" alt="ADB Toolbox" width="34" height="34" />
+        <span>ADB 工具箱 <small>v3.1</small></span>
+      </a>
+      <nav class="nav-links" aria-label="主导航">
+        <a href="index.html" data-i18n="nav.home">首页</a>
+        <a href="index.html#download" data-i18n="nav.download">下载</a>
+        <a href="versions.html" data-i18n="nav.versions">历史版本</a>
+        <a href="bugs.html" data-i18n="nav.bugs">Bug 记录</a>
+        <a href="changelog.html" data-i18n="nav.changelog">更新日志</a>
+        <a href="source.html" data-i18n="nav.source">源码</a>
+      </nav>
+      <div class="top-actions">
+        <button class="chip" id="lang-toggle" aria-label="切换语言">EN</button>
+        <button class="chip" id="theme-toggle" aria-label="切换主题">◐</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" style="padding-top:56px">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">VERSIONS</div>
+          <h2 data-i18n="versions.title">历史版本</h2>
+          <p data-i18n="versions.sub">由 GitHub Releases 真实数据生成；当前仅发布 v3.1 稳定版，历史版本待发布后自动出现。</p>
+        </div>
+
+        <div id="versions-list">
+          <article class="lg-glass doc-card">
+            <h2>
+              <span>v3.1 稳定版</span>
+              <span class="doc-tag tag-current" data-i18n="versions.current">当前最新</span>
+            </h2>
+            <p class="doc-date">2026-10-10 · tag v3.1</p>
+            <ul>
+              <li>⚡ 内核提权：68 个 vivo 内核偏移表 + arm64 GhostLock 原生二进制（NDK r29）</li>
+              <li>🚀 性能优化：16 品牌分类（小米/华为/vivo/iQOO…），通用 26 条 + 华为 30 条</li>
+              <li>🎮 游戏帧率：全局最高 165Hz，按游戏单独配置，进前台自动切换</li>
+              <li>🛡 安全护盾：root 全盘扫描恶意脚本，删除逐条确认</li>
+              <li>🔧 ADB 面板 / 强开网络 ADB / Magisk&KSU 模块管理 / WebUI 远程调试</li>
+              <li>✨ 首次设置向导 / 3 套主题 / 玻璃参数调节 / 三语言（中/英/印地）</li>
+            </ul>
+            <div class="dl-row">
+              <a class="btn primary small" href="https://github.com/fool593/ADBToolboxGlass-v3.1/releases/download/v3.1/ADBToolboxGlass-v3.1-.-release.apk" rel="noopener"><span class="dl-icon">⬇</span><span data-i18n="versions.apk">APK</span> · 10.6 MB</a>
+              <a class="btn ghost small" href="https://github.com/fool593/ADBToolboxGlass-v3.1/releases/download/v3.1/ADBToolboxGlass-v3.1-.zip" rel="noopener" data-i18n="versions.zip">源码 zip</a>
+              <a class="btn ghost small" href="https://github.com/fool593/ADBToolboxGlass-v3.1/releases/download/v3.1/ADBToolboxGlass-v3.1-git.zip" rel="noopener" data-i18n="versions.git">git zip</a>
+            </div>
+          </article>
+        </div>
+
+        <p style="margin-top:18px"><a href="index.html" data-i18n="versions.back">← 返回首页</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div>
+        <p class="copy" data-i18n="footer.copyright">© 2026 fool593 · Apache-2.0 项目</p>
+        <p class="copy" style="margin-top:6px;max-width:60ch" data-i18n="footer.disclaimer">本工具涉及系统级与内核级操作（有数据丢失/变砖风险），请仅在自有设备、接受风险、已备份的前提下使用。</p>
+      </div>
+      <div class="links">
+        <span data-i18n="footer.links">相关链接</span>
+        <a href="https://github.com/fool593/ADBToolboxGlass-v3.1" rel="noopener" data-i18n="footer.repo">GitHub 仓库</a>
+        <a href="https://github.com/fool593/ADBToolboxGlass-v3.1/releases" rel="noopener" data-i18n="footer.releases">Releases</a>
+        <a href="https://github.com/fool593/ADBToolboxGlass-v3.1/issues" rel="noopener" data-i18n="footer.issue">反馈问题</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="perf-badge" id="perf-badge"></div>
+</body>
+</html>

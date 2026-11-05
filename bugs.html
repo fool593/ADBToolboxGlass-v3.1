@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-theme-mode="system">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#eef2f8" />
+  <title>Bug 修复记录 — ADB 工具箱 v3.1 官方站</title>
+  <meta name="description" content="ADB 工具箱 Bug 修复记录：数据来自仓库更新日志真实内容——开屏闪退、GhostLock 假阳性、主题重启丢失等已修复项。" />
+  <meta property="og:title" content="Bug 修复记录 — ADB 工具箱 v3.1 官方站" />
+  <meta property="og:description" content="ADB 工具箱 Bug 修复记录（仓库更新日志真实数据）。" />
+  <meta property="og:image" content="./assets/site-banner-B7flzujM.jpg" />
+  <link rel="icon" type="image/png" href="./icon-192.png" />
+  <link rel="canonical" href="https://fool593.github.io/ADBToolboxGlass-v3.1/bugs.html" />
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('adb-theme') || 'system';
+        var sys = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', t === 'system' ? (sys ? 'dark' : 'light') : t);
+        var l = localStorage.getItem('adb-lang');
+        document.documentElement.setAttribute('lang', (l === 'zh' || l === 'en') ? (l === 'zh' ? 'zh-CN' : 'en') : 'zh-CN');
+      } catch (e) {}
+    })();
+  </script>
+  <script type="module" crossorigin src="./assets/site-main-BQHyWJK2.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/site-style-CDiowuqV.css">
+</head>
+<body>
+  <canvas id="bg-layer" aria-hidden="true"></canvas>
+  <div id="bg-blobs" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <img src="./icon-192.png" alt="ADB Toolbox" width="34" height="34" />
+        <span>ADB 工具箱 <small>v3.1</small></span>
+      </a>
+      <nav class="nav-links" aria-label="主导航">
+        <a href="index.html" data-i18n="nav.home">首页</a>
+        <a href="index.html#download" data-i18n="nav.download">下载</a>
+        <a href="versions.html" data-i18n="nav.versions">历史版本</a>
+        <a href="bugs.html" data-i18n="nav.bugs">Bug 记录</a>
+        <a href="changelog.html" data-i18n="nav.changelog">更新日志</a>
+        <a href="source.html" data-i18n="nav.source">源码</a>
+      </nav>
+      <div class="top-actions">
+        <button class="chip" id="lang-toggle" aria-label="切换语言">EN</button>
+        <button class="chip" id="theme-toggle" aria-label="切换主题">◐</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" style="padding-top:56px">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">BUG FIXES</div>
+          <h2 data-i18n="bugs.title">Bug 修复记录</h2>
+          <p data-i18n="bugs.sub">数据来自仓库更新日志（真实内容，未虚构）。状态说明：已修复 = 已在代码中修复并进入版本。</p>
+        </div>
+
+        <div class="lg-glass doc-card">
+          <h2>🛠 修复清单 <span class="doc-sub" style="margin:0">（来源：更新日志 v2.9）</span></h2>
+          <ul>
+            <li><span class="status-ok">✔ 已修复</span> — 性能优化误屏蔽系统入口（PerfSafety 保护名单修复）</li>
+            <li><span class="status-ok">✔ 已修复</span> — 开屏闪退（崩溃标记跳过，应用可正常进入）</li>
+            <li><span class="status-ok">✔ 已修复</span> — 亮度滑条空壳（无滑动效果）</li>
+            <li><span class="status-ok">✔ 已修复</span> — GhostLock 假阳性（严格 uid=0 判定）</li>
+            <li><span class="status-ok">✔ 已修复</span> — isRooted 假阳性</li>
+            <li><span class="status-ok">✔ 已修复</span> — 主题切换后重启丢失（themeUserOverrode 持久化）</li>
+            <li><span class="status-ok">✔ 已修复</span> — 玻璃文字消失 / 黑框</li>
+            <li><span class="status-ok">✔ 已修复</span> — RenderEffect 链复用导致的渲染异常</li>
+            <li><span class="status-ok">✔ 已修复</span> — 内存问题 6 处</li>
+            <li><span class="status-ok">✔ 已修复</span> — 模块刷入失败无明确反馈（15+ 错误码分类）</li>
+            <li><span class="status-ok">✔ 已修复</span> — 布局 token 错乱</li>
+            <li><span class="status-ok">✔ 已修复</span> — 向导授权按钮无响应</li>
+            <li><span class="status-ok">✔ 已修复</span> — Release 构建失败（截图 JPEG 改名 PNG 问题）</li>
+            <li><span class="status-ok">✔ 已修复</span> — 多语言换行归一化（任何机器克隆即干净）</li>
+          </ul>
+          <p class="dl-meta">💡 标注说明：以上条目直接摘自仓库 <a href="https://github.com/fool593/ADBToolboxGlass-v3.1/blob/master/更新日志.md" rel="noopener">更新日志.md</a>（v2.9 节）；v3.1 的独立 Bug 追踪（编号/Issue/PR）官方整理后可继续补充。</p>
+        </div>
+
+        <p style="margin-top:18px"><a href="index.html" data-i18n="bugs.back">← 返回首页</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div>
+        <p class="copy" data-i18n="footer.copyright">© 2026 fool593 · Apache-2.0 项目</p>
+        <p class="copy" style="margin-top:6px;max-width:60ch" data-i18n="footer.disclaimer">本工具涉及系统级与内核级操作（有数据丢失/变砖风险），请仅在自有设备、接受风险、已备份的前提下使用。</p>
+      </div>
+      <div class="links">
+        <span data-i18n="footer.links">相关链接</span>
+        <a href="https://github.com/fool593/ADBToolboxGlass-v3.1" rel="noopener" data-i18n="footer.repo">GitHub 仓库</a>
+        <a href="https://github.com/fool593/ADBToolboxGlass-v3.1/releases" rel="noopener" data-i18n="footer.releases">Releases</a>
+        <a href="https://github.com/fool593/ADBToolboxGlass-v3.1/issues" rel="noopener" data-i18n="footer.issue">反馈问题</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="perf-badge" id="perf-badge"></div>
+</body>
+</html>

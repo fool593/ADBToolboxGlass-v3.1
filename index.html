@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-theme-mode="system">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#eef2f8" />
+  <title>ADB 工具箱（ADBToolboxGlass）v3.1 — 官方站</title>
+  <meta name="description" content="ADB 工具箱 v3.1：面向自有设备的 Android 系统工具箱——16 品牌性能优化 / 165Hz 游戏帧率 / 安全护盾 / 68 偏移表内核提权。开源（Apache-2.0），命令真实执行并回读验证，删除操作逐条确认。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="ADB 工具箱（ADBToolboxGlass）v3.1 — 官方站" />
+  <meta property="og:description" content="面向自有设备的 Android 系统工具箱：性能优化、游戏帧率、安全护盾、内核提权。所有系统级命令真实执行并回读验证。" />
+  <meta property="og:image" content="./assets/site-banner-B7flzujM.jpg" />
+  <meta property="og:url" content="https://fool593.github.io/ADBToolboxGlass-v3.1/" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/png" href="./icon-192.png" />
+  <link rel="canonical" href="https://fool593.github.io/ADBToolboxGlass-v3.1/" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "ADB 工具箱（ADBToolboxGlass）",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Android",
+    "softwareVersion": "3.1",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "CNY" },
+    "author": { "@type": "Person", "name": "fool593" },
+    "license": "https://www.apache.org/licenses/LICENSE-2.0",
+    "downloadUrl": "https://github.com/fool593/ADBToolboxGlass-v3.1/releases/download/v3.1/ADBToolboxGlass-v3.1-.-release.apk"
+  }
+  </script>
+  <script>
+    /* 防闪烁：首帧同步应用主题 + 语言 */
+    (function () {
+      try {
+        var t = localStorage.getItem('adb-theme') || 'system';
+        var sys = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var res = t === 'system' ? (sys ? 'dark' : 'light') : t;
+        document.documentElement.setAttribute('data-theme', res);
+        document.documentElement.setAttribute('data-theme-mode', t);
+        var l = localStorage.getItem('adb-lang');
+        var lang = (l === 'zh' || l === 'en') ? l : ((navigator.language || 'zh').toLowerCase().startsWith('zh') ? 'zh' : 'en');
+        document.documentElement.setAttribute('lang', lang === 'zh' ? 'zh-CN' : 'en');
+      } catch (e) {}
+    })();
+  </script>
+  <script type="module" crossorigin src="./assets/site-main-BQHyWJK2.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/site-style-CDiowuqV.css">
+</head>
+<body>
+  <canvas id="bg-layer" aria-hidden="true"></canvas>
+  <div id="bg-blobs" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <!-- 顶部导航 -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <img src="./icon-192.png" alt="ADB Toolbox" width="34" height="34" />
+        <span>ADB 工具箱 <small>v3.1</small></span>
+      </a>
+      <nav class="nav-links" aria-label="主导航">
+        <a href="index.html" data-i18n="nav.home">首页</a>
+        <a href="index.html#download" data-i18n="nav.download">下载</a>
+        <a href="versions.html" data-i18n="nav.versions">历史版本</a>
+        <a href="bugs.html" data-i18n="nav.bugs">Bug 记录</a>
+        <a href="changelog.html" data-i18n="nav.changelog">更新日志</a>
+        <a href="source.html" data-i18n="nav.source">源码</a>
+      </nav>
+      <div class="top-actions">
+        <button class="chip" id="lang-toggle" aria-label="切换语言">EN</button>
+        <button class="chip" id="theme-toggle" aria-label="切换主题">◐</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="badges">
+            <span class="badge v" data-i18n="hero.badge.v">最新稳定版 v3.1</span>
+            <span class="badge" data-i18n="badge.minSdk">Android 8.0+ · 最低 SDK 26</span>
+            <span class="badge" data-i18n="badge.kmp">KMP 跨平台（Android/iOS 源码）</span>
+            <span class="badge" data-i18n="badge.langs">中 / EN / हिन्दी</span>
+            <span class="badge" data-i18n="badge.license">Apache-2.0</span>
+          </div>
+          <h1 data-i18n="hero.title">ADB 工具箱（ADBToolboxGlass）</h1>
+          <p class="sub" data-i18n="hero.sub">面向自有设备的 Android 系统工具箱——不用电脑也能性能调优、按游戏改帧率、插件/模块管理、系统还原、安全护盾与内核级提权。</p>
+          <p class="discipline" data-i18n="hero.discipline">核心纪律：所有系统级命令真实执行并回读验证；删除与破坏性操作永远由你逐条确认，应用绝不自动执行。</p>
+          <div class="hero-actions">
+            <a class="btn primary" href="https://github.com/fool593/ADBToolboxGlass-v3.1/releases/download/v3.1/ADBToolboxGlass-v3.1-.-release.apk" rel="noopener">
+              <span class="dl-icon">⬇</span><span data-i18n="hero.dl">下载 v3.1 稳定版</span>
+            </a>
+            <a class="btn ghost" href="https://github.com/fool593/ADBToolboxGlass-v3.1" rel="noopener" data-i18n="hero.source">查看源码</a>
+          </div>
+          <p class="dl-meta" data-i18n="hero.dl.note">正式签名 · versionCode 31 · 约 10.6 MB</p>
+        </div>
+        <div class="hero-visual">
+          <div class="lg-glass glass-frame">
+            <img src="./assets/site-banner-B7flzujM.jpg" alt="Liquid Glass design system" width="1120" height="630" fetchpriority="high" />
+          </div>
+          <div class="float-chip fc-1">✦ Liquid Glass</div>
+          <div class="float-chip fc-2">◈ Refraction · Dispersion</div>
+          <div class="float-chip fc-3">⬇ v3.1 stable</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 功能 -->
+    <section class="section" id="features">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker" data-i18n="features.kicker">FUNCTIONALITIES</div>
+          <h2 data-i18n="features.title">一个工具箱，覆盖系统的方方面面</h2>
+          <p data-i18n="features.sub">全部功能基于真实命令执行与回读验证，不做假成功。</p>
+        </div>
+        <div class="feature-grid">
+          <article class="lg-glass feature-card">
+            <div class="f-icon">🚀</div>
+            <h3 data-i18n="f.perf.title">性能优化</h3>
+            <p data-i18n="f.perf.desc">16 品牌独立分类（小米/华为/vivo/iQOO…），Root/ADB 分行优化。</p>
+            <ul>
+              <li data-i18n="f.perf.l1">通用 26 条 + 华为 30 条真实命令</li>
+              <li data-i18n="f.perf.l2">命令执行后回读验证，失败按错误码分类</li>
+              <li data-i18n="f.perf.l3">一键还原全部系统默认（47 键 + 27 组件）</li>
+            </ul>
+          </article>
+          <article class="lg-glass feature-card">
+            <div class="f-icon">🎮</div>
+            <h3 data-i18n="f.game.title">游戏帧率</h3>
+            <p data-i18n="f.game.desc">全局刷新率最高 165Hz，按游戏单独配置帧率。</p>
+            <ul>
+              <li data-i18n="f.game.l1">游戏进前台自动切换对应帧率</li>
+              <li data-i18n="f.game.l2">非华为免 ADB / 免 Root，华为走 ADB</li>
+              <li data-i18n="f.game.l3">Android 13+ 可选系统级限帧</li>
+            </ul>
+          </article>
+          <article class="lg-glass feature-card">
+            <div class="f-icon">🔧</div>
+            <h3 data-i18n="f.adb.title">ADB / 模块管理</h3>
+            <p data-i18n="f.adb.desc">终端、Shell 执行器、ADB 面板与插件模块管理。</p>
+            <ul>
+              <li data-i18n="f.adb.l1">重启 / 关机 / 强开网络 ADB</li>
+              <li data-i18n="f.adb.l2">Magisk / KSU 模块管理</li>
+              <li data-i18n="f.adb.l3">自带 WebUI 可远程调试</li>
+            </ul>
+          </article>
+          <article class="lg-glass feature-card">
+            <div class="f-icon">🛡</div>
+            <h3 data-i18n="f.shield.title">安全护盾</h3>
+            <p data-i18n="f.shield.desc">Root 全盘扫描恶意脚本，删除必须逐条确认。</p>
+            <ul>
+              <li data-i18n="f.shield.l1">识别删相册 / 删全机 / 混淆链等恶意脚本</li>
+              <li data-i18n="f.shield.l2">只列出，删除由你逐条确认</li>
+              <li data-i18n="f.shield.l3">Shizuku / 无障碍 / Root 三项授权真实状态</li>
+            </ul>
+          </article>
+          <article class="lg-glass feature-card">
+            <div class="f-icon">⚡</div>
+            <h3 data-i18n="f.root.title">内核提权</h3>
+            <p data-i18n="f.root.desc">内置 68 个 vivo 内核偏移表 + arm64 GhostLock 原生二进制。</p>
+            <ul>
+              <li data-i18n="f.root.l1">su uid=0 真实判定，拒绝假成功</li>
+              <li data-i18n="f.root.l2">一键 Root 自动重试（10 次 / 可停止）</li>
+              <li data-i18n="f.root.l3">表外内核按设计拒绝，不强配机型</li>
+            </ul>
+          </article>
+          <article class="lg-glass feature-card">
+            <div class="f-icon">✨</div>
+            <h3 data-i18n="f.ux.title">个性化</h3>
+            <p data-i18n="f.ux.desc">首次设置向导 + 三套主题 + 玻璃参数调节。</p>
+            <ul>
+              <li data-i18n="f.ux.l1">国庆 / 华为 / 经典三套主题持久化</li>
+              <li data-i18n="f.ux.l2">开屏动画开关、玻璃参数调节</li>
+              <li data-i18n="f.ux.l3">多语言换行归一化，克隆即干净</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 素材展示 -->
+    <section class="section" id="shots">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker" data-i18n="shots.kicker">LIQUID GLASS</div>
+          <h2 data-i18n="shots.title">真实光学，不是贴纸</h2>
+          <p data-i18n="shots.sub">六张官方素材：内折射、色散、Fresnel 高光，全部来自应用实机渲染。</p>
+        </div>
+        <div class="shots-grid">
+          <figure class="lg-glass shot-card" data-full="./assets/artworks/banner.jpg">
+            <img src="./assets/site-banner-B7flzujM.jpg" alt="Liquid Glass design spec" loading="lazy" width="800" height="450" />
+            <figcaption class="shot-cap" data-i18n="shots.banner">Liquid Glass (Backdrop) 设计规范</figcaption>
+          </figure>
+          <figure class="lg-glass shot-card" data-full="./assets/artworks/homescreen.png">
+            <img src="./assets/site-homescreen-ydgZBSep.png" alt="Home screen" loading="lazy" width="800" height="1200" />
+            <figcaption class="shot-cap" data-i18n="shots.homescreen">真实主屏效果</figcaption>
+          </figure>
+          <figure class="lg-glass shot-card" data-full="./assets/artworks/catalog_app.jpg">
+            <img src="./assets/site-catalog_app-DNNYvypT.jpg" alt="Component catalog" loading="lazy" width="800" height="422" />
+            <figcaption class="shot-cap" data-i18n="shots.catalog">玻璃组件目录</figcaption>
+          </figure>
+          <figure class="lg-glass shot-card" data-full="./assets/artworks/playground_app.jpg">
+            <img src="./assets/site-playground_app-CNzV_W1E.jpg" alt="Refraction playground" loading="lazy" width="800" height="1200" />
+            <figcaption class="shot-cap" data-i18n="shots.playground">折射参数调试台</figcaption>
+          </figure>
+          <figure class="lg-glass shot-card" data-full="./assets/artworks/android_inner_refraction.png">
+            <img src="./assets/site-android_inner_refraction-h8rzxePo.png" alt="Android inner refraction" loading="lazy" width="800" height="1200" />
+            <figcaption class="shot-cap" data-i18n="shots.android">Android 内折射演示</figcaption>
+          </figure>
+          <figure class="lg-glass shot-card" data-full="./assets/artworks/ios_inner_refraction.png">
+            <img src="./assets/site-ios_inner_refraction-Cs1HJWgF.png" alt="iOS advanced filter" loading="lazy" width="800" height="1200" />
+            <figcaption class="shot-cap" data-i18n="shots.ios">iOS 高级滤镜参数</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- 下载 -->
+    <section class="section" id="download">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker" data-i18n="dl.kicker">DOWNLOAD</div>
+          <h2 data-i18n="dl.title">下载 ADB 工具箱</h2>
+          <p data-i18n="dl.sub">下载链接从 GitHub Releases 自动同步，指向真实文件。</p>
+        </div>
+        <div class="lg-glass download-block">
+          <div class="dl-title">
+            <span data-i18n="dl.current.title">最新稳定版 v3.1</span>
+            <span class="dl-ver">versionCode 31</span>
+          </div>
+          <p class="dl-desc" data-i18n="dl.current.desc">正式签名（versionCode 31），推荐下载。功能：16 品牌性能优化 / 165Hz 游戏帧率 / 安全护盾 / 68 偏移表内核提权。</p>
+          <div class="dl-row">
+            <a class="btn primary" href="https://github.com/fool593/ADBToolboxGlass-v3.1/releases/download/v3.1/ADBToolboxGlass-v3.1-.-release.apk" rel="noopener"><span class="dl-icon">⬇</span><span data-i18n="dl.current.btn">下载 APK</span></a>
+            <a class="btn ghost" href="https://github.com/fool593/ADBToolboxGlass-v3.1/releases/download/v3.1/ADBToolboxGlass-v3.1-.zip" rel="noopener" data-i18n="dl.zip.title">源码包（无 .git）</a>
+            <a class="btn ghost" href="https://github.com/fool593/ADBToolboxGlass-v3.1/releases/download/v3.1/ADBToolboxGlass-v3.1-git.zip" rel="noopener" data-i18n="dl.git.title">源码包（含 .git）</a>
+          </div>
+          <p class="dl-meta"><code data-i18n="dl.current.file">ADBToolboxGlass-v3.1-.-release.apk（约 10.6 MB）</code></p>
+          <p class="dl-meta" data-i18n="dl.ascii.note">提示：GitHub 将中文资产名强制转为 ASCII（如「稳定版」→「-.-」），链接已指向真实文件。</p>
+          <p class="dl-meta"><a href="versions.html" data-i18n="dl.all">查看全部历史版本 →</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 技术 -->
+    <section class="section" id="tech">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker" data-i18n="tech.kicker">UNDER THE GLASS</div>
+          <h2 data-i18n="tech.title">液态玻璃设计系统</h2>
+          <p data-i18n="tech.sub">背景透射、动态折射、RGB 色散、Fresnel 边缘高光——本站的玻璃效果由 Canvas2D 真实合成，纯 backdrop-filter 仅作为无 JS 兜底。</p>
+        </div>
+        <div class="split">
+          <article class="lg-glass info-card">
+            <h3>◈ <span data-i18n="tech.optics.title">真实折射光学</span></h3>
+            <p data-i18n="tech.optics.desc">玻璃卡内绘制的是背景放大采样的实时折射层，带正弦波动态形变；绝不是一张半透明贴图。</p>
+          </article>
+          <article class="lg-glass info-card">
+            <h3>〰 <span data-i18n="tech.disp.title">RGB 色散</span></h3>
+            <p data-i18n="tech.disp.desc">红/蓝通道错位合成，玻璃边缘出现真实色差，与素材图一致。</p>
+          </article>
+          <article class="lg-glass info-card">
+            <h3>⟳ <span data-i18n="tech.sync.title">Releases 自动同步</span></h3>
+            <p data-i18n="tech.sync.desc">构建时脚本调用 GitHub Releases API，静态生成版本数据；Token 只存在于构建机，不进浏览器不落公开仓库。</p>
+          </article>
+          <article class="lg-glass info-card">
+            <h3>◐ <span>Liquid Glass Design System</span></h3>
+            <p>折射强度 / 位移 / 色散 / 边缘高光 / 阴影 / 透明度 / 光线方向 — 全部由 CSS 变量统一管理（--lg-refraction / --lg-dispersion / --lg-edge-highlight / --lg-inner-shadow / --lg-lift / --lg-light-angle）。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 信任 -->
+    <section class="section" id="trust">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker" data-i18n="workflow.kicker">WHY TRUST IT</div>
+          <h2 data-i18n="workflow.title">能信吗？三条硬约束</h2>
+        </div>
+        <div class="split">
+          <article class="lg-glass info-card">
+            <h3>1 · <span data-i18n="workflow.l1.t">事事先问人</span></h3>
+            <p data-i18n="workflow.l1.d">护盾扫描、还原、删除——一律"列出 → 你确认 → 才执行"。</p>
+          </article>
+          <article class="lg-glass info-card">
+            <h3>2 · <span data-i18n="workflow.l2.t">命令回读验证</span></h3>
+            <p data-i18n="workflow.l2.d">每条命令失败按 15+ 错误码分类并保留原始 stderr。</p>
+          </article>
+          <article class="lg-glass info-card">
+            <h3>3 · <span data-i18n="workflow.l3.t">端到端真实提权</span></h3>
+            <p data-i18n="workflow.l3.d">偏移表 + 原生二进制 + 执行 + uid=0 判定，表外内核按设计拒绝。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div>
+        <p class="copy" data-i18n="footer.copyright">© 2026 fool593 · Apache-2.0 项目</p>
+        <p class="copy" style="margin-top:6px;max-width:60ch" data-i18n="footer.disclaimer">本工具涉及系统级与内核级操作（有数据丢失/变砖风险），请仅在自有设备、接受风险、已备份的前提下使用。</p>
+      </div>
+      <div class="links">
+        <span data-i18n="footer.links">相关链接</span>
+        <a href="https://github.com/fool593/ADBToolboxGlass-v3.1" rel="noopener" data-i18n="footer.repo">GitHub 仓库</a>
+        <a href="https://github.com/fool593/ADBToolboxGlass-v3.1/releases" rel="noopener" data-i18n="footer.releases">Releases</a>
+        <a href="https://github.com/fool593/ADBToolboxGlass-v3.1/issues" rel="noopener" data-i18n="footer.issue">反馈问题</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lb-close" aria-label="Close">✕</button>
+    <img src="" alt="" />
+  </div>
+
+  <!-- 性能徽标 -->
+  <div class="perf-badge" id="perf-badge"></div>
+
+</body>
+</html>
