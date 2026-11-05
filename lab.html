@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-theme-mode="system">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-i18n="lab.meta.title">液态玻璃实验室 · ADB 工具箱</title>
+<meta name="description" content="实时切换壁纸、拖动玻璃面板，观察不同背景下的折射 / 色散 / 光线变化。">
+<meta property="og:title" content="液态玻璃实验室 · ADB 工具箱 v3.1">
+<meta property="og:description" content="实时预览壁纸与液态玻璃光学效果。">
+<meta property="og:type" content="website">
+<link rel="icon" href="./icon-192.png" type="image/png">
+<link rel="canonical" href="https://fool593.github.io/ADBToolboxGlass-v3.1/lab.html">
+<script>
+(() => { try {
+  var t = localStorage.getItem('adb-theme') || '';
+  var m = matchMedia('(prefers-color-scheme: dark)').matches;
+  var d = t === 'dark' || (t !== 'light' && m) ? 'dark' : 'light';
+  document.documentElement.dataset.theme = d;
+  document.documentElement.dataset.themeMode = t || 'system';
+  var l = localStorage.getItem('adb-lang') || 'zh';
+  document.documentElement.lang = l === 'en' ? 'en' : 'zh-CN';
+} catch (e) {} })();
+</script>
+  <script type="module" crossorigin src="./assets/site-lab-RdUg7ekX.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/site-main-BZ3OlTgS.js">
+  <link rel="stylesheet" crossorigin href="./assets/site-style-CsGyV_T4.css">
+</head>
+<body>
+<canvas id="bg-layer" aria-hidden="true"></canvas>
+<div id="bg-blobs" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span></div>
+
+<header class="topbar wrap">
+  <a class="brand" href="./index.html"><img src="./icon-192.png" width="32" height="32" alt="icon"><span data-i18n="brand">ADB 工具箱</span></a>
+  <nav class="nav-links" id="nav-links">
+    <a href="./index.html" data-i18n="nav.home">首页</a>
+    <a href="./versions.html" data-i18n="nav.versions">下载</a>
+    <a href="./bugs.html" data-i18n="nav.bugs">Bug 记录</a>
+    <a href="./changelog.html" data-i18n="nav.changelog">更新日志</a>
+    <a href="./source.html" data-i18n="nav.source">源码</a>
+    <a href="./wallpaper.html" data-i18n="nav.wall">壁纸</a>
+    <a href="./lab.html" class="active" data-i18n="nav.lab">实验室</a>
+  </nav>
+  <div class="top-actions">
+    <button class="chip" id="lang-toggle" aria-label="Language"><span aria-hidden="true">🌐</span><span id="lang-label">中</span></button>
+    <button class="chip" id="theme-toggle" aria-label="Theme"><span aria-hidden="true">🌓</span></button>
+  </div>
+</header>
+
+<main class="wrap lab-layout">
+  <section class="lab-stage" id="lab-stage" aria-label="实验室舞台">
+    <div class="lab-hint" data-i18n="lab.drag">🖐 拖动玻璃卡片 · 观察折射</div>
+    <div class="lg-glass lab-glass lab-a" data-tier="primary" id="glass-a">
+      <div class="lg-content lab-label">
+        <strong data-i18n="lab.glass.primary">主玻璃</strong>
+        <small data-i18n="lab.glass.sub">IOR 1.55 · Lens 剖面</small>
+      </div>
+    </div>
+    <div class="lg-glass lab-glass lab-b" data-tier="secondary" id="glass-b">
+      <div class="lg-content lab-label">
+        <strong data-i18n="lab.glass.secondary">次玻璃</strong>
+        <small data-i18n="lab.glass.sub2">IOR 1.45 · Smooth 剖面</small>
+      </div>
+    </div>
+    <div class="lg-glass lab-glass lab-c" data-tier="content" id="glass-c">
+      <div class="lg-content lab-label">
+        <strong data-i18n="lab.glass.content">内容卡</strong>
+        <small data-i18n="lab.glass.sub3">IOR 1.35 · 平台可读</small>
+      </div>
+    </div>
+  </section>
+
+  <aside class="lab-panel lg-glass">
+    <h2 data-i18n="lab.controls">实验控制台</h2>
+
+    <div class="wp-section">
+      <div class="wp-sec-label" data-i18n="lab.wallpaper">壁纸</div>
+      <div class="wp-live" id="lab-wall-glsl">
+        <button class="btn ghost small" data-kind="1" data-i18n="wall.live.fluid">流体</button>
+        <button class="btn ghost small" data-kind="2" data-i18n="wall.live.waves">波光</button>
+        <button class="btn ghost small" data-kind="3" data-i18n="wall.live.aurora">极光</button>
+        <button class="btn ghost small" data-kind="4" data-i18n="wall.live.stars">星尘</button>
+      </div>
+      <div class="wp-official" id="lab-wall-official">
+        <button class="wp-official" data-src="./lab-arts/banner.jpg"><span>Liquid Glass (Backdrop)</span></button>
+        <button class="wp-official" data-src="./lab-arts/catalog_app.jpg"><span>界面概览</span></button>
+        <button class="wp-official" data-src="./lab-arts/playground_app.jpg"><span>Playground</span></button>
+      </div>
+      <div class="wp-row">
+        <button class="btn ghost small" id="lab-wall-none" data-i18n="lab.wall.none">默认背景</button>
+      </div>
+    </div>
+
+    <div class="wp-section">
+      <div class="wp-sec-label" data-i18n="lab.params">光学参数（作用于全部玻璃）</div>
+      <label class="wp-range-row">IOR <input type="range" class="wp-range" id="p-ior" min="1.0" max="2.2" step="0.05" value="1.55"><span class="wp-val" id="v-ior">1.55</span></label>
+      <label class="wp-range-row">Bezel <input type="range" class="wp-range" id="p-bezel" min="2" max="60" step="1" value="20"><span class="wp-val" id="v-bezel">20</span></label>
+      <label class="wp-range-row">Depth <input type="range" class="wp-range" id="p-depth" min="2" max="60" step="1" value="16"><span class="wp-val" id="v-depth">16</span></label>
+      <label class="wp-range-row">色散 <input type="range" class="wp-range" id="p-ca" min="0" max="1" step="0.05" value="0.30"><span class="wp-val" id="v-ca">0.30</span></label>
+      <label class="wp-range-row">高光 <input type="range" class="wp-range" id="p-spec" min="0" max="1" step="0.05" value="0.60"><span class="wp-val" id="v-spec">0.60</span></label>
+      <label class="wp-range-row">圆角 <input type="range" class="wp-range" id="p-radius" min="0" max="60" step="1" value="28"><span class="wp-val" id="v-radius">28</span></label>
+      <label class="wp-range-row">交互强度 <input type="range" class="wp-range" id="p-interact" min="0" max="1" step="0.05" value="1"><span class="wp-val" id="v-interact">1.00</span></label>
+    </div>
+
+    <div class="wp-section">
+      <div class="wp-sec-label" data-i18n="lab.tier">材质档位（当前选中玻璃）</div>
+      <div class="wp-row" id="lab-tier">
+        <button class="btn ghost small" data-tier-set="primary" data-i18n="lab.tier.primary">主玻璃</button>
+        <button class="btn ghost small" data-tier-set="secondary" data-i18n="lab.tier.secondary">次玻璃</button>
+        <button class="btn ghost small" data-tier-set="content" data-i18n="lab.tier.content">内容卡</button>
+      </div>
+      <div class="wp-row" id="lab-profile">
+        <button class="btn ghost small" data-prof="0" data-i18n="lab.prof.lens">Lens 剖面</button>
+        <button class="btn ghost small" data-prof="1" data-i18n="lab.prof.smooth">Smooth 剖面</button>
+      </div>
+      <div class="wp-row">
+        <button class="btn ghost small" id="lab-reset" data-i18n="lab.reset">恢复初始参数</button>
+      </div>
+    </div>
+    <p class="wp-status" id="lab-status" role="status" aria-live="polite"></p>
+  </aside>
+</main>
+
+<footer class="wrap">
+  <p data-i18n="footer.note">ADB 工具箱（ADBToolboxGlass）v3.1 · Apache-2.0 · 仅供自有设备学习研究</p>
+  <p data-i18n="footer.links">仓库：<a href="https://github.com/fool593/ADBToolboxGlass-v3.1" target="_blank" rel="noopener">GitHub</a> · <a href="https://github.com/fool593/ADBToolboxGlass-v3.1/releases" target="_blank" rel="noopener">Releases</a></p>
+</footer>
+
+<div class="lightbox" id="lightbox" hidden>
+  <div class="lightbox-mask" id="lightbox-mask"></div>
+  <img id="lightbox-img" src="" alt="">
+  <button class="lightbox-close" id="lightbox-close" aria-label="Close">×</button>
+</div>
+<div class="perf-badge" id="perf-badge" hidden></div>
+
+</body>
+</html>
