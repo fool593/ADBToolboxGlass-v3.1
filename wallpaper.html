@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-theme-mode="system">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#eef2f8" />
+  <title>壁纸中心 — ADB 工具箱 v3.1 官方站</title>
+  <meta name="description" content="ADB 工具箱官方站壁纸中心：静态/纯色/官方素材壁纸，深浅主题独立配置，液态玻璃实时折射壁纸背景。" />
+  <meta property="og:title" content="壁纸中心 — ADB 工具箱 v3.1 官方站" />
+  <meta property="og:description" content="自定义页面背景壁纸，玻璃卡片实时折射壁纸内容。" />
+  <meta property="og:image" content="./assets/site-banner-B7flzujM.jpg" />
+  <link rel="icon" type="image/png" href="./icon-192.png" />
+  <link rel="canonical" href="https://fool593.github.io/ADBToolboxGlass-v3.1/wallpaper.html" />
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('adb-theme') || 'system';
+        var sys = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', t === 'system' ? (sys ? 'dark' : 'light') : t);
+        var l = localStorage.getItem('adb-lang');
+        document.documentElement.setAttribute('lang', (l === 'zh' || l === 'en') ? (l === 'zh' ? 'zh-CN' : 'en') : 'zh-CN');
+      } catch (e) {}
+    })();
+  </script>
+  <script type="module" crossorigin src="./assets/site-main-DXMIqd1I.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/site-style-CkOnV_Ux.css">
+</head>
+<body>
+  <canvas id="bg-layer" aria-hidden="true"></canvas>
+  <div id="bg-blobs" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">
+        <img src="./icon-192.png" alt="ADB Toolbox" width="34" height="34" />
+        <span>ADB 工具箱 <small>v3.1</small></span>
+      </a>
+      <nav class="nav-links" aria-label="主导航">
+        <a href="index.html" data-i18n="nav.home">首页</a>
+        <a href="index.html#download" data-i18n="nav.download">下载</a>
+        <a href="versions.html" data-i18n="nav.versions">历史版本</a>
+        <a href="bugs.html" data-i18n="nav.bugs">Bug 记录</a>
+        <a href="changelog.html" data-i18n="nav.changelog">更新日志</a>
+        <a href="source.html" data-i18n="nav.source">源码</a>
+        <a href="wallpaper.html" data-i18n="nav.wall">壁纸</a>
+      </nav>
+      <div class="top-actions">
+        <button class="chip" id="lang-toggle" aria-label="切换语言">EN</button>
+        <button class="chip" id="theme-toggle" aria-label="切换主题">◐</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" style="padding-top:56px">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">WALLPAPER</div>
+          <h2 data-i18n="wall.title">壁纸中心</h2>
+          <p data-i18n="wall.sub">为整站设置背景壁纸——深浅主题独立配置；玻璃卡片会实时折射壁纸内容。</p>
+        </div>
+
+        <div class="wp-layout">
+          <!-- 预览舞台：玻璃卡实时折射壁纸 -->
+          <div class="wp-stage" aria-label="壁纸预览舞台">
+            <figure class="lg-glass wp-demo wp-demo-a">
+              <img class="lg-content-img" src="./assets/site-android_inner_refraction-h8rzxePo.png" alt="demo A" width="360" height="760" loading="lazy" />
+            </figure>
+            <figure class="lg-glass wp-demo wp-demo-b">
+              <img class="lg-content-img" src="./assets/site-catalog_app-DNNYvypT.jpg" alt="demo B" width="640" height="338" loading="lazy" />
+            </figure>
+            <div class="lg-glass wp-demo wp-demo-c">
+              <h3>Liquid Glass</h3>
+              <p>背景透过玻璃弯曲——真实折射，不是贴图。</p>
+            </div>
+          </div>
+
+          <aside class="wp-panel lg-glass">
+            <div class="wp-section">
+              <p class="wp-sec-label" data-i18n="wall.current">当前壁纸</p>
+              <p class="wp-current" id="wp-current" data-i18n="wall.none">默认（未设置自定义壁纸）</p>
+              <div class="wp-row">
+                <button class="btn ghost small" id="wp-fav-btn" type="button" data-i18n="wall.fav">♡ 收藏</button>
+                <button class="btn ghost small" id="wp-random" type="button" data-i18n="wall.random">🎲 随机收藏</button>
+                <button class="btn ghost small" id="wp-reset" type="button" data-i18n="wall.reset">恢复默认</button>
+              </div>
+            </div>
+
+            <div class="wp-section">
+              <p class="wp-sec-label" data-i18n="wall.colors.title">预设纯色</p>
+              <div class="wp-colors" id="wp-colors" role="group" aria-label="preset colors"></div>
+            </div>
+
+            <div class="wp-section">
+              <p class="wp-sec-label" data-i18n="wall.official.title">官方素材壁纸</p>
+              <div class="wp-official" id="wp-official" role="group" aria-label="official wallpapers"></div>
+            </div>
+
+            <div class="wp-section">
+              <p class="wp-sec-label" data-i18n="wall.upload.title">上传图片（自动压缩 ≤1600px）</p>
+              <div class="wp-upload-row">
+                <input type="file" id="wp-file" accept="image/*" hidden />
+                <label class="btn ghost small" for="wp-file" data-i18n="wall.upload.btn">选择图片…</label>
+              </div>
+            </div>
+
+            <div class="wp-section">
+              <p class="wp-sec-label" data-i18n="wall.url.title">图片链接（URL）</p>
+              <div class="wp-url-row">
+                <input class="wp-input" id="wp-url" type="url" placeholder="https://example.com/bg.jpg" autocomplete="off" />
+                <button class="btn primary small" id="wp-url-apply" type="button" data-i18n="wall.url.apply">应用</button>
+              </div>
+            </div>
+
+            <div class="wp-section">
+              <p class="wp-sec-label" data-i18n="wall.focus.title">焦点（裁剪位置）</p>
+              <div class="wp-focus-grid" id="wp-focus-grid" role="group" aria-label="focal point"></div>
+            </div>
+
+            <div class="wp-section">
+              <p class="wp-sec-label" data-i18n="wall.fav.use">我的收藏</p>
+              <div class="wp-favs" id="wp-favs"></div>
+            </div>
+
+            <div class="wp-section">
+              <p class="wp-sec-label" data-i18n="wall.speed">动画速度</p>
+              <input class="wp-range" id="wp-speed" type="range" min="0" max="2" step="0.01" value="1" />
+              <p class="wp-sec-label" data-i18n="wall.interact">交互强度</p>
+              <input class="wp-range" id="wp-interact" type="range" min="0" max="1" step="0.01" value="1" />
+            </div>
+
+            <p class="wp-status" id="wp-status" role="status" aria-live="polite"></p>
+          </aside>
+        </div>
+
+        <p style="margin-top:18px"><a href="index.html" data-i18n="wall.back">← 返回首页</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div>
+        <p class="copy" data-i18n="footer.copyright">© 2026 fool593 · Apache-2.0 项目</p>
+        <p class="copy" style="margin-top:6px;max-width:60ch" data-i18n="footer.disclaimer">本工具涉及系统级与内核级操作（有数据丢失/变砖风险），请仅在自有设备、接受风险、已备份的前提下使用。</p>
+      </div>
+      <div class="links">
+        <span data-i18n="footer.links">相关链接</span>
+        <a href="https://github.com/fool593/ADBToolboxGlass-v3.1" rel="noopener" data-i18n="footer.repo">GitHub 仓库</a>
+        <a href="https://github.com/fool593/ADBToolboxGlass-v3.1/releases" rel="noopener" data-i18n="footer.releases">Releases</a>
+        <a href="https://github.com/fool593/ADBToolboxGlass-v3.1/issues" rel="noopener" data-i18n="footer.issue">反馈问题</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="perf-badge" id="perf-badge"></div>
+</body>
+</html>
